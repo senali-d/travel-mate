@@ -1,8 +1,14 @@
+import { BrowserRouter } from 'react-router-dom'
+
+import AllRoutes from './routes/routes'
+
 const App = () => {
   return (
-    <h1 className="text-3xl text-center text-red-500 font-bold">
-      Hello world!
-    </h1>
+    <>
+      <BrowserRouter>
+        <AllRoutes />
+      </BrowserRouter>
+    </>
   )
 }
 
