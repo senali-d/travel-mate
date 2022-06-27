@@ -18,8 +18,8 @@ const AllRoutes = () => {
         <Route path={RouteRegistry.guides.path} element={<Guides />} />
         <Route path={RouteRegistry.about.path} element={<About />} />
         <Route path={RouteRegistry.contact.path} element={<Contact />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
