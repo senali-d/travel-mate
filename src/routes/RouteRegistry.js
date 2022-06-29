@@ -19,6 +19,18 @@ const RouteRegistry = {
     path: '/contact',
     title: 'Contact',
   },
+  adminDashboard: {
+    path: '/admin',
+    title: 'Dashboard',
+  },
+  adminPlaces: {
+    path: '/admin/places',
+    title: 'Places',
+  },
+  adminGuides: {
+    path: '/admin/guides',
+    title: 'Guides',
+  },
 }
 
 export default RouteRegistry
