@@ -1,0 +1,442 @@
+type Guides {
+  created_at: DateTime
+  email: String
+  id: ID!
+  location: String
+  mobile: String
+  name: String
+  reviewsList: [Reviews] @materializer(query: "getReviewsUsingGuide_id")
+}
+
+type Hotels {
+  address: String
+  bedrooms: Int
+  beds: Int
+  created_at: DateTime
+  description: String
+  fee: Float
+  guests: Int
+  id: ID!
+  latitude: Float
+  longitude: Float
+  name: String
+  offers: Offers
+    @materializer(
+      query: "getOffers"
+      arguments: [{ name: "id", field: "offers_id" }]
+    )
+  offersList: [Offers] @materializer(query: "getOffersUsingHotel_id")
+  offers_id: ID
+  photo: String
+  points: Float
+  reviewsList: [Reviews] @materializer(query: "getReviewsUsingHotel_id")
+}
+
+type Offers {
+  created_at: DateTime
+  hotel_id: ID
+  hotels: Hotels
+    @materializer(
+      query: "getHotels"
+      arguments: [{ name: "id", field: "hotel_id" }]
+    )
+  hotelsList: [Hotels] @materializer(query: "getHotelsUsingOffers_id")
+  id: ID!
+  name: String
+}
+
+type Photos {
+  created_at: DateTime
+  id: ID!
+  photo: String
+  place_id: ID
+  places: Places
+    @materializer(
+      query: "getPlaces"
+      arguments: [{ name: "id", field: "place_id" }]
+    )
+}
+
+type Places {
+  created_at: DateTime
+  description: String
+  id: ID!
+  location: String
+  photo: String
+  photosList: [Photos] @materializer(query: "getPhotosUsingPlace_id")
+  points: Float
+  reviewsList: [Reviews] @materializer(query: "getReviewsUsingPlace_id")
+  title: String
+}
+
+type Reviews {
+  created_at: DateTime
+  guide_id: ID
+  guides: Guides
+    @materializer(
+      query: "getGuides"
+      arguments: [{ name: "id", field: "guide_id" }]
+    )
+  hotel_id: ID
+  hotels: Hotels
+    @materializer(
+      query: "getHotels"
+      arguments: [{ name: "id", field: "hotel_id" }]
+    )
+  id: ID!
+  place_id: ID
+  places: Places
+    @materializer(
+      query: "getPlaces"
+      arguments: [{ name: "id", field: "place_id" }]
+    )
+  review: String!
+  users: Users
+    @materializer(
+      query: "getUsers"
+      arguments: [{ name: "id", field: "users_id" }]
+    )
+  users_id: ID
+}
+
+type Users {
+  country: String
+  created_at: DateTime
+  email: String
+  id: ID!
+  image: String
+  password: String
+  reviewsList: [Reviews] @materializer(query: "getReviewsUsingUsers_id")
+}
+
+"""
+These are some examples of queries generated from the schema. Feel free to modify them or add your own.
+"""
+type Query {
+  getGuidesList: [Guides]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "guides"
+      configuration: "postgresql_config"
+    )
+  getGuides(id: ID!): Guides
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "guides"
+      configuration: "postgresql_config"
+    )
+  getReviewsUsingGuide_id(id: ID!): [Reviews]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."users_id"
+        FROM "public"."reviews" T
+        WHERE T."guide_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getHotelsList: [Hotels]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "hotels"
+      configuration: "postgresql_config"
+    )
+  getHotels(id: ID!): Hotels
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "hotels"
+      configuration: "postgresql_config"
+    )
+  getOffersUsingHotel_id(id: ID!): [Offers]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."hotel_id", T."id", T."name"
+        FROM "public"."offers" T
+        WHERE T."hotel_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getReviewsUsingHotel_id(id: ID!): [Reviews]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."users_id"
+        FROM "public"."reviews" T
+        WHERE T."hotel_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getOffersList: [Offers]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "offers"
+      configuration: "postgresql_config"
+    )
+  getOffers(id: ID!): Offers
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "offers"
+      configuration: "postgresql_config"
+    )
+  getHotelsUsingOffers_id(id: ID!): [Hotels]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."address", T."bedrooms", T."beds", T."created_at", T."description", T."fee", T."guests", T."id", T."latitude", T."longitude", T."name", T."offers_id", T."photo", T."points"
+        FROM "public"."hotels" T
+        WHERE T."offers_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getPhotosList: [Photos]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "photos"
+      configuration: "postgresql_config"
+    )
+  getPhotos(id: ID!): Photos
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "photos"
+      configuration: "postgresql_config"
+    )
+  getPlacesList: [Places]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "places"
+      configuration: "postgresql_config"
+    )
+  getPlaces(id: ID!): Places
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "places"
+      configuration: "postgresql_config"
+    )
+  getPhotosUsingPlace_id(id: ID!): [Photos]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."id", T."photo", T."place_id"
+        FROM "public"."photos" T
+        WHERE T."place_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getReviewsUsingPlace_id(id: ID!): [Reviews]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."users_id"
+        FROM "public"."reviews" T
+        WHERE T."place_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getReviewsList: [Reviews]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reviews"
+      configuration: "postgresql_config"
+    )
+  getReviews(id: ID!): Reviews
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reviews"
+      configuration: "postgresql_config"
+    )
+  getUsersList: [Users]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "users"
+      configuration: "postgresql_config"
+    )
+  getUsers(id: ID!): Users
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "users"
+      configuration: "postgresql_config"
+    )
+  getReviewsUsingUsers_id(id: ID!): [Reviews]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."users_id"
+        FROM "public"."reviews" T
+        WHERE T."users_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+}
+
+"""
+These are some examples of mutations generated from the schema. Feel free to modify them or add your own.
+"""
+type Mutation {
+  insertGuides(
+    created_at: DateTime!
+    email: String!
+    name: String!
+    mobile: String!
+    location: String!
+  ): Guides
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "guides"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteGuides(id: ID!): Guides
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "guides"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertHotels(
+    bedrooms: Int!
+    created_at: DateTime!
+    guests: Int!
+    description: String!
+    name: String!
+    points: Float!
+    address: String!
+    offers_id: ID!
+    beds: Int!
+    fee: Float!
+    latitude: Float!
+    longitude: Float!
+    photo: String!
+  ): Hotels
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "hotels"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteHotels(id: ID!): Hotels
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "hotels"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertOffers(created_at: DateTime!, name: String!, hotel_id: ID!): Offers
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "offers"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteOffers(id: ID!): Offers
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "offers"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertPhotos(created_at: DateTime!, photo: String!, place_id: ID!): Photos
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "photos"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deletePhotos(id: ID!): Photos
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "photos"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertPlaces(
+    created_at: DateTime!
+    description: String!
+    photo: String!
+    points: Float!
+    location: String!
+    title: String!
+  ): Places
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "places"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deletePlaces(id: ID!): Places
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "places"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertReviews(
+    place_id: ID!
+    review: String!
+    created_at: DateTime!
+    users_id: ID!
+    hotel_id: ID!
+    guide_id: ID!
+  ): Reviews
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reviews"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteReviews(id: ID!): Reviews
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "reviews"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertUsers(
+    image: String!
+    created_at: DateTime!
+    country: String!
+    email: String!
+    password: String!
+  ): Users
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "users"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteUsers(id: ID!): Users
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "users"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+}
