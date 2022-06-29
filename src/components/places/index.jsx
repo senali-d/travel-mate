@@ -1,40 +1,30 @@
-import ImageCard from "../common/card/image-card"
+import { useQuery } from '@apollo/client'
 
-import Image from '../../assets/images/sigiriya.jpg'
+import { GET_PLACES } from '../../graphql/queries'
+import ImageCard from '../common/card/image-card'
 
 const Places = () => {
+  const { loading, error, data } = useQuery(GET_PLACES);
+
+  const places = data && data.getPlacesList
+
+  if (loading) return <p>Loading ...</p>
+
+  if (error) return ''
+
   return (
     <div className="py-10 flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center lg:justify-start lg:gap-x-7">
-      <ImageCard 
-        image={Image} 
-        title={'Sigiriya'} 
-        description={'Here are the biggest enterprise technology acquisitions of 2021 sofar, in reverse chronological order.'}
-        stars={4.8}
-       />
-      <ImageCard 
-        image={Image} 
-        title={'Sigiriya'} 
-        description={'Here are the biggest enterprise technology acquisitions of 2021 sofar, in reverse chronological order.'}
-        stars={4.8}
-       />
-      <ImageCard 
-        image={Image} 
-        title={'Sigiriya'} 
-        description={'Here are the biggest enterprise technology acquisitions of 2021 sofar, in reverse chronological order.'}
-        stars={4.8}
-       />
-      <ImageCard 
-        image={Image} 
-        title={'Sigiriya'} 
-        description={'Here are the biggest enterprise technology acquisitions of 2021 sofar, in reverse chronological order.'}
-        stars={4.8}
-       />
-      <ImageCard 
-        image={Image} 
-        title={'Sigiriya'} 
-        description={'Here are the biggest enterprise technology acquisitions of 2021 sofar, in reverse chronological order.'}
-        stars={4.8}
-       />
+      {
+        places && places.map(place => 
+          <ImageCard 
+            key={place.id}
+            image={place.photo}
+            title={place.title} 
+            description={place.description}
+            stars={place.points}
+           />
+        )
+      }
     </div>
   )
 }

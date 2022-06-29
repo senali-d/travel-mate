@@ -17,7 +17,7 @@ const ImageCard = ({ image, title, description, stars }) => {
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 flex-1">
               {title}
             </h5>
-            {stars && <div className="flex items-center"><AiFillStar />{stars}</div>}
+            {stars && <div className="flex items-center"><AiFillStar />{stars.toFixed(2)}</div>}
           </div>
           <p className="mb-3 font-normal text-gray-700">
             {description}
@@ -33,7 +33,7 @@ export default ImageCard
 ImageCard.propTypes = {
   image: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  desc: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
   stars: PropTypes.number,
 }
 
