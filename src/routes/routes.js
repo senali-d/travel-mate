@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 
 import RouteRegistry from './RouteRegistry'
+import { Roles } from '../constants/enums'
 import Layout from '../components/common/layout'
 import Home from '../components/home'
 import About from '../components/about'
@@ -13,6 +14,7 @@ import AdminDashboard from '../components/admin/dashboard'
 import AdminPlaces from '../components/admin/places'
 import AdminGuides from '../components/admin/guides'
 import PrivateRoute from './private-routes'
+import Profile from '../components/profile'
 
 const AllRoutes = () => {
   return (
@@ -23,6 +25,14 @@ const AllRoutes = () => {
         <Route path={RouteRegistry.guides.path} element={<Guides />} />
         <Route path={RouteRegistry.about.path} element={<About />} />
         <Route path={RouteRegistry.contact.path} element={<Contact />} />
+        <Route 
+          path={RouteRegistry.profile.path} 
+          element={
+            <PrivateRoute role={Roles.TRAVELLER}>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Route>
       <Route 

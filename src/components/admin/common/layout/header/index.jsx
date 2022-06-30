@@ -44,7 +44,7 @@ const Header = () => {
               }
               <div className={`origin-top-right absolute right-0 top-[52px] w-48 rounded-md shadow-lg bg-indigo-50 ring-1 ring-black ring-opacity-5 focus:outline-none transform transition-transform ${dropdown ? 'flex' : 'hidden'}`}>
                 <div className="py-1" role="none">
-                  <Link to="/myaccount" className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">My Profile</Link>
+                  <Link to="/profile" className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">My Profile</Link>
                   <button type="submit" className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:text-[#b1b845]" onClick={logOut}>Sign out</button>
                 </div>
               </div>
