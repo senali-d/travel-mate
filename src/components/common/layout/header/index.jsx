@@ -1,17 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { BsGoogle } from 'react-icons/bs'
+import { FaUserCircle } from 'react-icons/fa'
 import { GoogleLogin } from 'react-google-login'
 
 import AuthContainer from '../../../../container/auth'
 import RouteRegistry from '../../../../routes/RouteRegistry'
 
 const Header = () => {
-  const { signIn } = AuthContainer.useContainer()
+  const authService = AuthContainer.useContainer()
+  const { signIn, logout, isAuthenticated, getUserInfo } = authService
   const { pathname } = useLocation()
 
   const [isOpenMenu, setIsOpenMenu] = useState(false)
+  const [dropdown, setDropdown] = useState(false)
+  const [userInfo, setUserInfo] = useState()
+
+  useEffect(() => {
+    const user = getUserInfo()
+    if(user !== undefined) {
+      setUserInfo(user)
+    }
+  }, [authService])
+
+  const toggleDropdown = () => {
+    setDropdown(!dropdown)
+  }
 
   return (
     <nav className="fixed z-10 w-full mx-auto bg-indigo-50 border-gray-200 px-2 sm:px-4 py-2.5 rounded shadow">
@@ -22,22 +37,35 @@ const Header = () => {
           </span>
         </Link>
         <div className="flex md:order-2">
-          <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-            render={renderProps => (
-              <button
-                type="button"
-                className="text-white bg-[#b1b845] hover:bg-[#969c3b] focus:ring-4 focus:outline-none focus:ring-transparent font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 ml-5 flex items-center gap-1"
-                onClick={renderProps.onClick} 
-                disabled={renderProps.disabled}
-              >
-                <BsGoogle />Sign In
-              </button>
-            )}
-            onSuccess={signIn}
-            onFailure={signIn}
-            cookiePolicy={'single_host_origin'}
-          />
+          {isAuthenticated ? 
+            <>
+              {userInfo ? <img src={userInfo.image} alt={userInfo.name} /> :
+                <FaUserCircle onClick={toggleDropdown} className=" flex self-center text:lg md:text-2xl text-[#6d86a8] cursor-pointer ml-4" size={30} />
+              }
+              <div className={`origin-top-right absolute right-0 top-[52px] w-48 rounded-md shadow-lg bg-indigo-50 ring-1 ring-black ring-opacity-5 focus:outline-none transform transition-transform ${dropdown ? 'flex' : 'hidden'}`}>
+                <div className="py-1" role="none">
+                  <Link to="/myaccount" className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">My Profile</Link>
+                  <button type="submit" className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:text-[#b1b845]" onClick={logout}>Sign out</button>
+                </div>
+              </div>
+            </> :
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+              render={renderProps => (
+                <button
+                  type="button"
+                  className="text-white bg-[#b1b845] hover:bg-[#969c3b] focus:ring-4 focus:outline-none focus:ring-transparent font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 ml-5 flex items-center gap-1"
+                  onClick={renderProps.onClick} 
+                  disabled={renderProps.disabled}
+                >
+                  <BsGoogle />Sign In
+                </button>
+              )}
+              onSuccess={signIn}
+              onFailure={signIn}
+              cookiePolicy={'single_host_origin'}
+            />
+          }
           <button
             data-collapse-toggle="mobile-menu-4"
             type="button"
