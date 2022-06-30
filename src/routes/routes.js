@@ -25,7 +25,14 @@ const AllRoutes = () => {
         <Route path={RouteRegistry.contact.path} element={<Contact />} />
         <Route path="*" element={<NotFound />} />
       </Route>
-      <Route path={RouteRegistry.adminDashboard.path} element={<AdminLayout />} >
+      <Route 
+        path={RouteRegistry.adminDashboard.path} 
+        element={
+          <PrivateRoute>
+            <AdminLayout />
+          </PrivateRoute>
+        }
+      >
         <Route 
           path={RouteRegistry.adminDashboard.path}
           element={
