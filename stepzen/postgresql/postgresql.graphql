@@ -269,6 +269,14 @@ type Query {
       table: "users"
       configuration: "postgresql_config"
     )
+  getUserByEmail(email: String!): Users
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "users" where "email" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getReviewsUsingUsers_id(id: ID!): [Reviews]
     @dbquery(
       type: "postgresql"
@@ -415,7 +423,7 @@ type Mutation {
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertUsers(created_at: DateTime!, email: String!, role: String!): Users
+  insertUsers(email: String!, role: String!): Users
     @dbquery(
       type: "postgresql"
       schema: "public"
