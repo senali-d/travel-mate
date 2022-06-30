@@ -100,13 +100,11 @@ type Reviews {
 }
 
 type Users {
-  country: String
   created_at: DateTime
   email: String
   id: ID!
-  image: String
-  password: String
   reviewsList: [Reviews] @materializer(query: "getReviewsUsingUsers_id")
+  role: String
 }
 
 """
@@ -417,13 +415,7 @@ type Mutation {
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertUsers(
-    image: String!
-    created_at: DateTime!
-    country: String!
-    email: String!
-    password: String!
-  ): Users
+  insertUsers(created_at: DateTime!, email: String!, role: String!): Users
     @dbquery(
       type: "postgresql"
       schema: "public"
