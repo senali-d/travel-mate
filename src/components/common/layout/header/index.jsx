@@ -5,7 +5,7 @@ import { BsGoogle } from 'react-icons/bs'
 import { FaUserCircle } from 'react-icons/fa'
 import { GoogleLogin } from 'react-google-login'
 
-import AuthContainer from '../../../../container/auth'
+import AuthContainer from '../../../../containers/auth'
 import RouteRegistry from '../../../../routes/RouteRegistry'
 
 const Header = () => {
@@ -37,7 +37,7 @@ const Header = () => {
           </span>
         </Link>
         <div className="flex md:order-2">
-          {isAuthenticated ? 
+          {isAuthenticated() ? 
             <>
               {userInfo ? 
                 <img src={userInfo.image} alt={userInfo.name} width="30" height="30" className="rounded-full ml-4 cursor-pointer" onClick={toggleDropdown} /> :

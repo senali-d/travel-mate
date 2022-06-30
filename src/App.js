@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom'
 
-import AuthService from './container/auth'
+import AuthService from './containers/auth'
 import AllRoutes from './routes/routes'
 
 const App = () => {

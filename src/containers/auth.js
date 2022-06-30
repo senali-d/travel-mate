@@ -65,11 +65,11 @@ const useAuth = () => {
       if (expireTimeStamp < currentTimeStamp) {
         Storage.remove(process.env.REACT_APP_LOCAL_STORAGE_TOKEN_IDENTIFIER)
         Storage.remove(process.env.REACT_APP_LOCAL_STORAGE_USER_DATA_IDENTIFIER)
-        return false;
+        return false
       }
       return true;
     } catch (error) {
-      return false;
+      return false
     }
   }
 
@@ -78,7 +78,7 @@ const useAuth = () => {
     logOut,
     isAuthenticated,
     getUserInfo,
-  };
-};
+  }
+}
 
-export default createContainer(useAuth);
+export default createContainer(useAuth)
