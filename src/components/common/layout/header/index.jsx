@@ -39,7 +39,8 @@ const Header = () => {
         <div className="flex md:order-2">
           {isAuthenticated ? 
             <>
-              {userInfo ? <img src={userInfo.image} alt={userInfo.name} /> :
+              {userInfo ? 
+                <img src={userInfo.image} alt={userInfo.name} width="30" height="30" className="rounded-full ml-4 cursor-pointer" onClick={toggleDropdown} /> :
                 <FaUserCircle onClick={toggleDropdown} className=" flex self-center text:lg md:text-2xl text-[#6d86a8] cursor-pointer ml-4" size={30} />
               }
               <div className={`origin-top-right absolute right-0 top-[52px] w-48 rounded-md shadow-lg bg-indigo-50 ring-1 ring-black ring-opacity-5 focus:outline-none transform transition-transform ${dropdown ? 'flex' : 'hidden'}`}>
