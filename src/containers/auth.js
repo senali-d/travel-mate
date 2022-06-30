@@ -2,8 +2,13 @@ import { useState, useEffect } from 'react'
 import { createContainer } from 'unstated-next'
 import jwtDecode from 'jwt-decode'
 import moment from 'moment'
+import { useMutation } from '@apollo/client'
 
 import * as Storage from '../utils/local-storage'
+import client from '../apallo-client'
+import { GET_USER_BY_EMAIL } from '../graphql/queries'
+import { CREATE_USER } from '../graphql/mutation'
+import { Roles } from '../constants/enums'
 
 const useAuth = () => {
   const [authenticated, setAuthenticated] = useState(false)
@@ -13,12 +18,12 @@ const useAuth = () => {
     validateToken()
   },[])
 
-  const signIn = (response) => {
+  const signIn = async(response) => {
     const { profileObj, tokenObj } = response
-    console.log(response)
     Storage.set(process.env.REACT_APP_LOCAL_STORAGE_TOKEN_IDENTIFIER, tokenObj.id_token)
-    settingUserDataToLocalStorage(profileObj)
     setAuthenticated(true)
+    const user = await createUserLocally(profileObj.email)
+    settingUserDataToLocalStorage(profileObj, user.role)
   }
   
   const logOut = () => {
@@ -46,12 +51,13 @@ const useAuth = () => {
     }
   }
 
-  const settingUserDataToLocalStorage = (profileObj) => {
+  const settingUserDataToLocalStorage = (profileObj, role) => {
     const { email, name, imageUrl } = profileObj
     const obj = {
       name: name,
       email: email,
       image: imageUrl,
+      role: role,
     }
     Storage.set(process.env.REACT_APP_LOCAL_STORAGE_USER_DATA_IDENTIFIER, obj)
     setUserInfo(obj)
@@ -70,6 +76,30 @@ const useAuth = () => {
       return true;
     } catch (error) {
       return false
+    }
+  }
+
+  const [createUser] = useMutation(CREATE_USER);
+
+  const createUserLocally = async(email) => {
+    try {
+      const { data: {getUserByEmail} } = await client.query({
+        query: GET_USER_BY_EMAIL,
+        variables: {
+          email: email
+        }
+      })
+      const userExists = getUserByEmail
+      if(!userExists) {
+        const { data: {insertUsers: newUser} } = await createUser({
+          variables: {email: email, role: Roles.TRAVELLER }
+        })
+        return newUser
+      }else {
+        return userExists
+      }
+    } catch (error) {
+      
     }
   }
 
