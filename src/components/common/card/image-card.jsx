@@ -5,13 +5,11 @@ const ImageCard = ({ image, title, description, stars }) => {
   return (
     <div className="lg:w-[calc(33%-1rem)] sm:w-[calc(50%-0.5rem)]">
       <div className="bg-white rounded-lg border border-gray-200 shadow-md">
-        <a href="#">
-          <img
-            className="rounded-t-lg"
-            src={image}
-            alt=""
-          />
-        </a>
+        <img
+          className="rounded-t-lg"
+          src={image}
+          alt={title}
+        />
         <div className="p-5">
           <div className="flex">
             <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 flex-1">

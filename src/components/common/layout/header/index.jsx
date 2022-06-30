@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AiOutlineMenu } from 'react-icons/ai'
+import { BsGoogle } from 'react-icons/bs'
+import { GoogleLogin } from 'react-google-login'
 
+import AuthContainer from '../../../../container/auth'
 import RouteRegistry from '../../../../routes/RouteRegistry'
 
 const Header = () => {
+  const { signIn } = AuthContainer.useContainer()
   const { pathname } = useLocation()
 
   const [isOpenMenu, setIsOpenMenu] = useState(false)
@@ -18,12 +22,22 @@ const Header = () => {
           </span>
         </Link>
         <div className="flex md:order-2">
-          <button
-            type="button"
-            className="text-white bg-[#b1b845] hover:bg-[#969c3b] focus:ring-4 focus:outline-none focus:ring-transparent font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 ml-5"
-          >
-            Sign In
-          </button>
+          <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            render={renderProps => (
+              <button
+                type="button"
+                className="text-white bg-[#b1b845] hover:bg-[#969c3b] focus:ring-4 focus:outline-none focus:ring-transparent font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 ml-5 flex items-center gap-1"
+                onClick={renderProps.onClick} 
+                disabled={renderProps.disabled}
+              >
+                <BsGoogle />Sign In
+              </button>
+            )}
+            onSuccess={signIn}
+            onFailure={signIn}
+            cookiePolicy={'single_host_origin'}
+          />
           <button
             data-collapse-toggle="mobile-menu-4"
             type="button"
