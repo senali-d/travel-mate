@@ -4,11 +4,15 @@ const RouteRegistry = {
     title: 'Travel Mate',
   },
   places: {
-    path: '/places',
+    path: '/place',
     title: 'Places',
   },
+  placeDetail: {
+    path: '/place/:id',
+    title: 'Place Detail'
+  },
   guides: {
-    path: '/guides',
+    path: '/guide',
     title: 'Guides',
   },
   about: {
@@ -28,11 +32,11 @@ const RouteRegistry = {
     title: 'Dashboard',
   },
   adminPlaces: {
-    path: '/admin/places',
+    path: '/admin/place',
     title: 'Places',
   },
   adminGuides: {
-    path: '/admin/guides',
+    path: '/admin/guide',
     title: 'Guides',
   },
 }

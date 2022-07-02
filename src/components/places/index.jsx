@@ -1,14 +1,21 @@
+import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 
+import RouteRegistry from '../../routes/RouteRegistry'
 import { GET_PLACES } from '../../graphql/queries'
 import ImageCard from '../common/card/image-card'
 import Loader from '../common/loader'
 import NoData from '../common/no-data'
 
 const Places = () => {
+  const navigate = useNavigate()
   const { loading, error, data } = useQuery(GET_PLACES);
 
   const places = data && data.getPlaceList
+
+  const handleRedirect = (id) => {
+    navigate(`${RouteRegistry.places.path}/${id}`)
+  }
 
   return (
     <div className={`py-10 flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center ${loading || error ? 'lg:justify-center' : 'lg:justify-start'} lg:gap-x-7`}>
@@ -21,6 +28,7 @@ const Places = () => {
             title={place.title} 
             description={place.description}
             stars={place.points}
+            onClick={() => handleRedirect(place.id)}
            />
         ) : <NoData message='Not found any place' />
       }

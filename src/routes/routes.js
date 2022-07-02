@@ -15,6 +15,7 @@ import AdminPlaces from '../components/admin/places'
 import AdminGuides from '../components/admin/guides'
 import PrivateRoute from './private-routes'
 import Profile from '../components/profile'
+import PlaceDetail from '../components/places/place-detail'
 
 const AllRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AllRoutes = () => {
         <Route path={RouteRegistry.guides.path} element={<Guides />} />
         <Route path={RouteRegistry.about.path} element={<About />} />
         <Route path={RouteRegistry.contact.path} element={<Contact />} />
+        <Route path={RouteRegistry.placeDetail.path} element={<PlaceDetail />} />
         <Route 
           path={RouteRegistry.profile.path} 
           element={

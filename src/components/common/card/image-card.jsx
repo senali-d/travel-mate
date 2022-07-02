@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import { AiFillStar } from 'react-icons/ai'
 
-const ImageCard = ({ image, title, description, stars }) => {
+const ImageCard = ({ image, title, description, stars, onClick }) => {
   return (
-    <div className="lg:w-[calc(33%-1rem)] sm:w-[calc(50%-0.5rem)]">
+    <div className="lg:w-[calc(33%-1rem)] sm:w-[calc(50%-0.5rem)]" onClick={onClick}>
       <div className="bg-white rounded-lg border border-gray-200 shadow-md">
         <img
           className="rounded-t-lg"
@@ -33,6 +33,7 @@ ImageCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   stars: PropTypes.number,
+  onClick: PropTypes.func,
 }
 
 ImageCard.defaultProps = {

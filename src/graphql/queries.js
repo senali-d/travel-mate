@@ -12,6 +12,26 @@ export const GET_PLACES = gql`
   }
 `;
 
+export const GET_PLACE = gql`
+  query MyQuery($id: ID!) {
+    getPlace(id: $id) {
+    title
+    points
+    photo
+    location
+    id
+    description
+    reviewList {
+      review
+      user {
+        id
+        name
+      }
+    }
+  }
+  }
+`;
+
 export const GET_USER_BY_ID = gql`
   query MyQuery($id: ID!) {
     getUser(id: $id) {
