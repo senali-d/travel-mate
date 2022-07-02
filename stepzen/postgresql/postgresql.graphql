@@ -1,14 +1,14 @@
-type Guides {
+type Guide {
   created_at: DateTime
   email: String
   id: ID!
   location: String
   mobile: String
   name: String
-  reviewsList: [Reviews] @materializer(query: "getReviewsUsingGuide_id")
+  reviewList: [Review] @materializer(query: "getReviewUsingGuide_id")
 }
 
-type Hotels {
+type Hotel {
   address: String
   bedrooms: Int
   beds: Int
@@ -20,90 +20,92 @@ type Hotels {
   latitude: Float
   longitude: Float
   name: String
-  offers: Offers
+  offer: Offer
     @materializer(
-      query: "getOffers"
-      arguments: [{ name: "id", field: "offers_id" }]
+      query: "getOffer"
+      arguments: [{ name: "id", field: "offer_id" }]
     )
-  offersList: [Offers] @materializer(query: "getOffersUsingHotel_id")
-  offers_id: ID
+  offerList: [Offer] @materializer(query: "getOfferUsingHotel_id")
+  offer_id: ID
   photo: String
   points: Float
-  reviewsList: [Reviews] @materializer(query: "getReviewsUsingHotel_id")
+  reviewList: [Review] @materializer(query: "getReviewUsingHotel_id")
 }
 
-type Offers {
+type Offer {
   created_at: DateTime
-  hotel_id: ID
-  hotels: Hotels
+  hotel: Hotel
     @materializer(
-      query: "getHotels"
+      query: "getHotel"
       arguments: [{ name: "id", field: "hotel_id" }]
     )
-  hotelsList: [Hotels] @materializer(query: "getHotelsUsingOffers_id")
+  hotelList: [Hotel] @materializer(query: "getHotelUsingOffer_id")
+  hotel_id: ID
   id: ID!
   name: String
 }
 
-type Photos {
+type Photo {
   created_at: DateTime
   id: ID!
   photo: String
-  place_id: ID
-  places: Places
+  place: Place
     @materializer(
-      query: "getPlaces"
+      query: "getPlace"
       arguments: [{ name: "id", field: "place_id" }]
     )
+  place_id: ID
 }
 
-type Places {
+type Place {
   created_at: DateTime
   description: String
   id: ID!
   location: String
   photo: String
-  photosList: [Photos] @materializer(query: "getPhotosUsingPlace_id")
+  photoList: [Photo] @materializer(query: "getPhotoUsingPlace_id")
   points: Float
-  reviewsList: [Reviews] @materializer(query: "getReviewsUsingPlace_id")
+  reviewList: [Review] @materializer(query: "getReviewUsingPlace_id")
   title: String
 }
 
-type Reviews {
+type Review {
   created_at: DateTime
-  guide_id: ID
-  guides: Guides
+  guide: Guide
     @materializer(
-      query: "getGuides"
+      query: "getGuide"
       arguments: [{ name: "id", field: "guide_id" }]
     )
-  hotel_id: ID
-  hotels: Hotels
+  guide_id: ID
+  hotel: Hotel
     @materializer(
-      query: "getHotels"
+      query: "getHotel"
       arguments: [{ name: "id", field: "hotel_id" }]
     )
+  hotel_id: ID
   id: ID!
-  place_id: ID
-  places: Places
+  place: Place
     @materializer(
-      query: "getPlaces"
+      query: "getPlace"
       arguments: [{ name: "id", field: "place_id" }]
     )
+  place_id: ID
   review: String!
-  users: Users
+  user: User
     @materializer(
-      query: "getUsers"
-      arguments: [{ name: "id", field: "users_id" }]
+      query: "getUser"
+      arguments: [{ name: "id", field: "user_id" }]
     )
-  users_id: ID
+  user_id: ID
 }
 
-type Users {
+type User {
   created_at: DateTime
   email: String
   id: ID!
-  reviewsList: [Reviews] @materializer(query: "getReviewsUsingUsers_id")
+  image: String
+  name: String
+  reviewList: [Review] @materializer(query: "getReviewUsingUser_id")
   role: String
 }
 
@@ -111,179 +113,171 @@ type Users {
 These are some examples of queries generated from the schema. Feel free to modify them or add your own.
 """
 type Query {
-  getGuidesList: [Guides]
+  getGuideList: [Guide]
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "guides"
+      table: "guide"
       configuration: "postgresql_config"
     )
-  getGuides(id: ID!): Guides
+  getGuide(id: ID!): Guide
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "guides"
+      table: "guide"
       configuration: "postgresql_config"
     )
-  getReviewsUsingGuide_id(id: ID!): [Reviews]
+  getReviewUsingGuide_id(id: ID!): [Review]
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."users_id"
-        FROM "public"."reviews" T
+      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."user_id"
+        FROM "public"."review" T
         WHERE T."guide_id" = $1
       """
       configuration: "postgresql_config"
     )
-  getHotelsList: [Hotels]
+  getHotelList: [Hotel]
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "hotels"
+      table: "hotel"
       configuration: "postgresql_config"
     )
-  getHotels(id: ID!): Hotels
+  getHotel(id: ID!): Hotel
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "hotels"
+      table: "hotel"
       configuration: "postgresql_config"
     )
-  getOffersUsingHotel_id(id: ID!): [Offers]
+  getOfferUsingHotel_id(id: ID!): [Offer]
     @dbquery(
       type: "postgresql"
       query: """
       SELECT T."created_at", T."hotel_id", T."id", T."name"
-        FROM "public"."offers" T
+        FROM "public"."offer" T
         WHERE T."hotel_id" = $1
       """
       configuration: "postgresql_config"
     )
-  getReviewsUsingHotel_id(id: ID!): [Reviews]
+  getReviewUsingHotel_id(id: ID!): [Review]
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."users_id"
-        FROM "public"."reviews" T
+      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."user_id"
+        FROM "public"."review" T
         WHERE T."hotel_id" = $1
       """
       configuration: "postgresql_config"
     )
-  getOffersList: [Offers]
+  getOfferList: [Offer]
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "offers"
+      table: "offer"
       configuration: "postgresql_config"
     )
-  getOffers(id: ID!): Offers
+  getOffer(id: ID!): Offer
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "offers"
+      table: "offer"
       configuration: "postgresql_config"
     )
-  getHotelsUsingOffers_id(id: ID!): [Hotels]
+  getHotelUsingOffer_id(id: ID!): [Hotel]
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."address", T."bedrooms", T."beds", T."created_at", T."description", T."fee", T."guests", T."id", T."latitude", T."longitude", T."name", T."offers_id", T."photo", T."points"
-        FROM "public"."hotels" T
-        WHERE T."offers_id" = $1
+      SELECT T."address", T."bedrooms", T."beds", T."created_at", T."description", T."fee", T."guests", T."id", T."latitude", T."longitude", T."name", T."offer_id", T."photo", T."points"
+        FROM "public"."hotel" T
+        WHERE T."offer_id" = $1
       """
       configuration: "postgresql_config"
     )
-  getPhotosList: [Photos]
+  getPhotoList: [Photo]
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "photos"
+      table: "photo"
       configuration: "postgresql_config"
     )
-  getPhotos(id: ID!): Photos
+  getPhoto(id: ID!): Photo
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "photos"
+      table: "photo"
       configuration: "postgresql_config"
     )
-  getPlacesList: [Places]
+  getPlaceList: [Place]
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "places"
+      table: "place"
       configuration: "postgresql_config"
     )
-  getPlaces(id: ID!): Places
+  getPlace(id: ID!): Place
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "places"
+      table: "place"
       configuration: "postgresql_config"
     )
-  getPhotosUsingPlace_id(id: ID!): [Photos]
+  getPhotoUsingPlace_id(id: ID!): [Photo]
     @dbquery(
       type: "postgresql"
       query: """
       SELECT T."created_at", T."id", T."photo", T."place_id"
-        FROM "public"."photos" T
+        FROM "public"."photo" T
         WHERE T."place_id" = $1
       """
       configuration: "postgresql_config"
     )
-  getReviewsUsingPlace_id(id: ID!): [Reviews]
+  getReviewUsingPlace_id(id: ID!): [Review]
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."users_id"
-        FROM "public"."reviews" T
+      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."user_id"
+        FROM "public"."review" T
         WHERE T."place_id" = $1
       """
       configuration: "postgresql_config"
     )
-  getReviewsList: [Reviews]
+  getReviewList: [Review]
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "reviews"
+      table: "review"
       configuration: "postgresql_config"
     )
-  getReviews(id: ID!): Reviews
+  getReview(id: ID!): Review
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "reviews"
+      table: "review"
       configuration: "postgresql_config"
     )
-  getUsersList: [Users]
+  getUserList: [User]
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "users"
+      table: "user"
       configuration: "postgresql_config"
     )
-  getUsers(id: ID!): Users
+  getUser(id: ID!): User
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "users"
+      table: "user"
       configuration: "postgresql_config"
     )
-  getUserByEmail(email: String!): Users
+  getReviewUsingUser_id(id: ID!): [Review]
     @dbquery(
       type: "postgresql"
       query: """
-      select * from "users" where "email" = $1
-      """
-      configuration: "postgresql_config"
-    )
-  getReviewsUsingUsers_id(id: ID!): [Reviews]
-    @dbquery(
-      type: "postgresql"
-      query: """
-      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."users_id"
-        FROM "public"."reviews" T
-        WHERE T."users_id" = $1
+      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."user_id"
+        FROM "public"."review" T
+        WHERE T."user_id" = $1
       """
       configuration: "postgresql_config"
     )
@@ -293,29 +287,29 @@ type Query {
 These are some examples of mutations generated from the schema. Feel free to modify them or add your own.
 """
 type Mutation {
-  insertGuides(
+  insertGuide(
     created_at: DateTime!
     email: String!
     name: String!
     mobile: String!
     location: String!
-  ): Guides
+  ): Guide
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "guides"
+      table: "guide"
       dml: INSERT
       configuration: "postgresql_config"
     )
-  deleteGuides(id: ID!): Guides
+  deleteGuide(id: ID!): Guide
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "guides"
+      table: "guide"
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertHotels(
+  insertHotel(
     bedrooms: Int!
     created_at: DateTime!
     guests: Int!
@@ -323,119 +317,125 @@ type Mutation {
     name: String!
     points: Float!
     address: String!
-    offers_id: ID!
     beds: Int!
-    fee: Float!
     latitude: Float!
     longitude: Float!
     photo: String!
-  ): Hotels
+    offer_id: ID!
+    fee: Float!
+  ): Hotel
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "hotels"
+      table: "hotel"
       dml: INSERT
       configuration: "postgresql_config"
     )
-  deleteHotels(id: ID!): Hotels
+  deleteHotel(id: ID!): Hotel
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "hotels"
+      table: "hotel"
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertOffers(created_at: DateTime!, name: String!, hotel_id: ID!): Offers
+  insertOffer(created_at: DateTime!, name: String!, hotel_id: ID!): Offer
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "offers"
+      table: "offer"
       dml: INSERT
       configuration: "postgresql_config"
     )
-  deleteOffers(id: ID!): Offers
+  deleteOffer(id: ID!): Offer
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "offers"
+      table: "offer"
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertPhotos(created_at: DateTime!, photo: String!, place_id: ID!): Photos
+  insertPhoto(created_at: DateTime!, photo: String!, place_id: ID!): Photo
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "photos"
+      table: "photo"
       dml: INSERT
       configuration: "postgresql_config"
     )
-  deletePhotos(id: ID!): Photos
+  deletePhoto(id: ID!): Photo
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "photos"
+      table: "photo"
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertPlaces(
+  insertPlace(
     created_at: DateTime!
     description: String!
     photo: String!
     points: Float!
     location: String!
     title: String!
-  ): Places
+  ): Place
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "places"
+      table: "place"
       dml: INSERT
       configuration: "postgresql_config"
     )
-  deletePlaces(id: ID!): Places
+  deletePlace(id: ID!): Place
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "places"
+      table: "place"
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertReviews(
+  insertReview(
     place_id: ID!
     review: String!
     created_at: DateTime!
-    users_id: ID!
     hotel_id: ID!
     guide_id: ID!
-  ): Reviews
+    user_id: ID!
+  ): Review
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "reviews"
+      table: "review"
       dml: INSERT
       configuration: "postgresql_config"
     )
-  deleteReviews(id: ID!): Reviews
+  deleteReview(id: ID!): Review
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "reviews"
+      table: "review"
       dml: DELETE
       configuration: "postgresql_config"
     )
-  insertUsers(email: String!, role: String!): Users
+  insertUser(
+    image: String!
+    created_at: DateTime!
+    email: String!
+    name: String!
+    role: String!
+  ): User
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "users"
+      table: "user"
       dml: INSERT
       configuration: "postgresql_config"
     )
-  deleteUsers(id: ID!): Users
+  deleteUser(id: ID!): User
     @dbquery(
       type: "postgresql"
       schema: "public"
-      table: "users"
+      table: "user"
       dml: DELETE
       configuration: "postgresql_config"
     )
