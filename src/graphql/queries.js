@@ -16,16 +16,18 @@ export const GET_PLACE = gql`
   query MyQuery($id: ID!) {
     getPlace(id: $id) {
     title
-    points
     photo
     location
-    id
     description
     reviewList {
+      created_at
       review
+      stars
       user {
-        id
         name
+        image
+        country
+        created_at
       }
     }
   }
