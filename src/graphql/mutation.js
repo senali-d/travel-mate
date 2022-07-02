@@ -15,3 +15,22 @@ export const CREATE_USER = gql`
     }
   }
 `;
+
+export const UPDATE_USER = gql`
+  mutation MyMutation (
+    $id: ID!
+    $name: String
+    $image: String
+  ) {
+    updateUser(
+      id: $id,
+      name: $name
+      image: $image
+    ) {
+      id
+      name
+      email
+      image
+    }
+  }
+`;

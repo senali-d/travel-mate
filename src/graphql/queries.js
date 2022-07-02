@@ -12,6 +12,17 @@ export const GET_PLACES = gql`
   }
 `;
 
+export const GET_USER_BY_ID = gql`
+  query MyQuery($id: ID!) {
+    getUser(id: $id) {
+      id
+      email
+      name
+      image
+    }
+  }
+`;
+
 export const GET_USER_BY_EMAIL = gql`
   query MyQuery($email: String!) {
     getUserByEmail(email: $email) {
