@@ -436,6 +436,18 @@ type Mutation {
       dml: INSERT
       configuration: "postgresql_config"
     )
+  updateUser(
+    id: ID!,
+    name: String
+    image: String
+  ): User
+    @dbquery(
+      type: "postgresql"
+      query: """
+      update "user" SET "name" = $2, "image" = $3 WHERE "id" = $1 RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
   deleteUser(id: ID!): User
     @dbquery(
       type: "postgresql"
