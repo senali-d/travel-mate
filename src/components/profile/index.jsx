@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
+import Button from '../common/button'
 import AuthContainer from '../../containers/auth'
 import client from '../../apallo-client'
 import { GET_USER_BY_ID } from '../../graphql/queries'
@@ -15,6 +15,8 @@ const Profile = () => {
     email: '',
   })
 
+  const { id, image: userImage, name: username } = getUserInfo()
+  
   const [updateUser, { loading, error }] = useMutation(UPDATE_USER);
 
   useEffect(() => {
@@ -25,7 +27,7 @@ const Profile = () => {
     const { data: {getUser} } = await client.query({
       query: GET_USER_BY_ID,
       variables: {
-        id: getUserInfo().id
+        id: id
       }
     })
     setProfile(getUser)
@@ -40,7 +42,7 @@ const Profile = () => {
   const updateProfile = async() => {
     try {
       const { data: {updateUser: updatedUser} } = await updateUser({
-        variables: {id: getUserInfo().id, name: profile.name, image: 'etuwr' }
+        variables: {id: id, name: profile.name, image: 'etuwr' }
       })
       setProfile(updatedUser)
     }
@@ -54,10 +56,8 @@ const Profile = () => {
       <div className="flex flex-col items-center">
         <img
           className="mb-5 w-24 h-24 rounded-full shadow-lg"
-          src={
-            "https://res.cloudinary.com/zencloude/image/upload/v1656501523/travel-mate/sigiriya_yf7sjf.jpg"
-          }
-          alt="Bonnie image"
+          src={profile.image ? profile.image : userImage}
+          alt={username}
         />
         <div className="w-[90%] flex flex-row flex-wrap gap-2">
           <div className="w-[calc(50%-8px)] mb-4">
@@ -73,10 +73,7 @@ const Profile = () => {
             <input placeholder="Country" type="text" id="country" name="country" className="w-full bg-white rounded border border-gray-300 focus:border-[#b1b845] focus:ring-2 focus:ring-[#b1b845] text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" value={profile?.country ? profile.country : ''} onChange={handleChange} />
           </div> */}
         </div>
-        <button className="flex items-center text-white bg-[#b1b845] border-0 py-2 px-6 focus:outline-none hover:bg-[#b1b845] rounded text-lg" onClick={updateProfile}>
-          {loading && <AiOutlineLoading3Quarters className="animate-spin h-5 w-5 mr-3" />}
-          Update Profile
-        </button>
+        <Button title="Update Profile" loading={loading} onClick={updateProfile} />
       </div>
     </div>
   )
