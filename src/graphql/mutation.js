@@ -21,16 +21,22 @@ export const UPDATE_USER = gql`
     $id: ID!
     $name: String
     $image: String
+    $mobile: String
+    $country: String
   ) {
     updateUser(
       id: $id,
       name: $name
       image: $image
+      mobile: $mobile
+      country: $country
     ) {
       id
       name
       email
       image
+      mobile
+      country
     }
   }
 `;

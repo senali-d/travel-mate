@@ -19,6 +19,8 @@ export const GET_USER_BY_ID = gql`
       email
       name
       image
+      mobile
+      country
     }
   }
 `;
