@@ -91,7 +91,7 @@ const useAuth = () => {
       })
       const userExists = getUserByEmail
       if(!userExists) {
-        const { data: {insertUsers: newUser} } = await createUser({
+        const { data: {insertUser: newUser} } = await createUser({
           variables: {email: email, role: Roles.TRAVELLER }
         })
         return newUser

@@ -8,7 +8,7 @@ import NoData from '../common/no-data'
 const Places = () => {
   const { loading, error, data } = useQuery(GET_PLACES);
 
-  const places = data && data.getPlacesList
+  const places = data && data.getPlaceList
 
   return (
     <div className={`py-10 flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center ${loading || error ? 'lg:justify-center' : 'lg:justify-start'} lg:gap-x-7`}>

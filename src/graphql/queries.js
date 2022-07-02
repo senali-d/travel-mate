@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export const GET_PLACES = gql`
   query MyQuery   {
-    getPlacesList {
+    getPlaceList {
       id
       title
       description

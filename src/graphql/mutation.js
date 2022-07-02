@@ -5,7 +5,7 @@ export const CREATE_USER = gql`
     $email: String!
     $role: String!
   ) {
-    insertUsers(
+    insertUser(
       email: $email
       role: $role
     ) {
