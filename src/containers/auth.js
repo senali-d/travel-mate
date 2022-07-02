@@ -23,7 +23,7 @@ const useAuth = () => {
     Storage.set(process.env.REACT_APP_LOCAL_STORAGE_TOKEN_IDENTIFIER, tokenObj.id_token)
     setAuthenticated(true)
     const user = await createUserLocally(profileObj.email)
-    settingUserDataToLocalStorage(profileObj, user.role)
+    settingUserDataToLocalStorage(profileObj, user.role, user.id)
   }
   
   const logOut = () => {
@@ -51,13 +51,14 @@ const useAuth = () => {
     }
   }
 
-  const settingUserDataToLocalStorage = (profileObj, role) => {
+  const settingUserDataToLocalStorage = (profileObj, role, id) => {
     const { email, name, imageUrl } = profileObj
     const obj = {
       name: name,
       email: email,
       image: imageUrl,
       role: role,
+      id: id
     }
     Storage.set(process.env.REACT_APP_LOCAL_STORAGE_USER_DATA_IDENTIFIER, obj)
     setUserInfo(obj)
