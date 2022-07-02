@@ -100,10 +100,12 @@ type Review {
 }
 
 type User {
+  country: String
   created_at: DateTime
   email: String
   id: ID!
   image: String
+  mobile: String
   name: String
   reviewList: [Review] @materializer(query: "getReviewUsingUser_id")
   role: String
@@ -440,11 +442,13 @@ type Mutation {
     id: ID!,
     name: String
     image: String
+    mobile: String
+    country: String
   ): User
     @dbquery(
       type: "postgresql"
       query: """
-      update "user" SET "name" = $2, "image" = $3 WHERE "id" = $1 RETURNING *
+      update "user" SET "name" = $2, "image" = $3, "mobile" = $4, "country" = $5 WHERE "id" = $1 RETURNING *
       """
       configuration: "postgresql_config"
     )
