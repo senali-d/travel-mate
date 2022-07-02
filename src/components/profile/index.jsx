@@ -13,6 +13,7 @@ const Profile = () => {
   const [profile, setProfile] = useState({
     name: '',
     email: '',
+    image: '',
     mobile: '',
     country: '',
   })
@@ -47,7 +48,7 @@ const Profile = () => {
         variables: {
           id: id,
           name: profile.name,
-          image: 'etuwr',
+          image: profile.image,
           mobile: profile.mobile,
           country: profile.country,
         }
@@ -59,13 +60,43 @@ const Profile = () => {
     }
   }
 
+  const handleImageUpload = (e) => {
+    uploadImage(e.target.files[0])
+  }
+
+  const uploadImage = (image) => {
+    const data = new FormData()
+    data.append("file", image)
+    data.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET)
+    data.append("cloud_name", process.env.REACT_APP_CLOUD_NAME)
+    fetch(process.env.REACT_APP_CLOUDINARY_URL, {
+      method:"post",
+      body: data
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      setProfile((prevProfile) => ({...prevProfile, ['image']: data.url}))
+    })
+    .catch(err => console.log(err))
+  }
+
+
   return (
     <div className="md:w-[75%] w-[100%] m-auto bg-white rounded-lg border border-gray-200 shadow-md pt-7 pb-10 my-10">
       <div className="flex flex-col items-center">
         <img
-          className="mb-5 w-24 h-24 rounded-full shadow-lg"
+          className="w-24 h-24 rounded-full shadow-lg mb-[-96px]"
           src={profile.image ? profile.image : userImage}
           alt={username}
+        />
+        <label for="file-upload" className="w-24 h-24 rounded-full" />
+        <input
+          className="invisible"
+          type="file"
+          id="file-upload"
+          name="avatar"
+          accept="image/png, image/jpeg"
+          onChange={handleImageUpload}
         />
         <div className="w-[90%] flex flex-row flex-wrap gap-2">
           <div className="w-[calc(50%-8px)] mb-4">
