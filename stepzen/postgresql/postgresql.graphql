@@ -5,7 +5,6 @@ type Guide {
   location: String
   mobile: String
   name: String
-  reviewList: [Review] @materializer(query: "getReviewUsingGuide_id")
 }
 
 type Hotel {
@@ -29,7 +28,6 @@ type Hotel {
   offer_id: ID
   photo: String
   points: Float
-  reviewList: [Review] @materializer(query: "getReviewUsingHotel_id")
 }
 
 type Offer {
@@ -71,18 +69,6 @@ type Place {
 
 type Review {
   created_at: DateTime
-  guide: Guide
-    @materializer(
-      query: "getGuide"
-      arguments: [{ name: "id", field: "guide_id" }]
-    )
-  guide_id: ID
-  hotel: Hotel
-    @materializer(
-      query: "getHotel"
-      arguments: [{ name: "id", field: "hotel_id" }]
-    )
-  hotel_id: ID
   id: ID!
   place: Place
     @materializer(
@@ -91,6 +77,7 @@ type Review {
     )
   place_id: ID
   review: String!
+  stars: Int
   user: User
     @materializer(
       query: "getUser"
@@ -129,16 +116,6 @@ type Query {
       table: "guide"
       configuration: "postgresql_config"
     )
-  getReviewUsingGuide_id(id: ID!): [Review]
-    @dbquery(
-      type: "postgresql"
-      query: """
-      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."user_id"
-        FROM "public"."review" T
-        WHERE T."guide_id" = $1
-      """
-      configuration: "postgresql_config"
-    )
   getHotelList: [Hotel]
     @dbquery(
       type: "postgresql"
@@ -159,16 +136,6 @@ type Query {
       query: """
       SELECT T."created_at", T."hotel_id", T."id", T."name"
         FROM "public"."offer" T
-        WHERE T."hotel_id" = $1
-      """
-      configuration: "postgresql_config"
-    )
-  getReviewUsingHotel_id(id: ID!): [Review]
-    @dbquery(
-      type: "postgresql"
-      query: """
-      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."user_id"
-        FROM "public"."review" T
         WHERE T."hotel_id" = $1
       """
       configuration: "postgresql_config"
@@ -239,7 +206,7 @@ type Query {
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."user_id"
+      SELECT T."created_at", T."id", T."place_id", T."review", T."stars", T."user_id"
         FROM "public"."review" T
         WHERE T."place_id" = $1
       """
@@ -285,7 +252,7 @@ type Query {
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."guide_id", T."hotel_id", T."id", T."place_id", T."review", T."user_id"
+      SELECT T."created_at", T."id", T."place_id", T."review", T."stars", T."user_id"
         FROM "public"."review" T
         WHERE T."user_id" = $1
       """
@@ -408,8 +375,7 @@ type Mutation {
     place_id: ID!
     review: String!
     created_at: DateTime!
-    hotel_id: ID!
-    guide_id: ID!
+    stars: Int!
     user_id: ID!
   ): Review
     @dbquery(
