@@ -17,6 +17,14 @@ const Places = () => {
     navigate(`${RouteRegistry.places.path}/${id}`)
   }
 
+  const starPoints = ({ points, reviewList }) => {
+    if(reviewList.length > 0) {
+      return points/reviewList.length
+    }else {
+      return points
+    }
+  }
+
   return (
     <div className={`py-10 flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center ${loading || error ? 'lg:justify-center' : 'lg:justify-start'} lg:gap-x-7`}>
       {
@@ -27,7 +35,7 @@ const Places = () => {
             image={place.photo}
             title={place.title} 
             description={place.description}
-            stars={place.points}
+            stars={starPoints(place)}
             onClick={() => handleRedirect(place.id)}
            />
         ) : <NoData message='Not found any place' />

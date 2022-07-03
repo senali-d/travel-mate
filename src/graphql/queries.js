@@ -8,6 +8,9 @@ export const GET_PLACES = gql`
       description
       points
       photo
+      reviewList {
+        id
+      }
     }
   }
 `;

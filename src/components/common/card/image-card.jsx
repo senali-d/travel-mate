@@ -12,10 +12,11 @@ const ImageCard = ({ image, title, description, stars, onClick }) => {
         />
         <div className="p-5">
           <div className="flex">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 flex-1">
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-700 flex-1">
               {title}
             </h5>
-            {stars && <div className="flex items-center"><AiFillStar />{stars.toFixed(2)}</div>}
+            {stars && <div className="flex items-center text-gray-800">
+              <AiFillStar className="text-[#b1b845]" size="20" />{stars.toFixed(2)}</div>}
           </div>
           <p className="mb-3 font-normal text-gray-700">
             {description}
