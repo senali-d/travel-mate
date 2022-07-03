@@ -20,6 +20,7 @@ export const GET_PLACE = gql`
     location
     description
     reviewList {
+      id
       created_at
       review
       stars

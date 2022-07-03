@@ -40,3 +40,26 @@ export const UPDATE_USER = gql`
     }
   }
 `;
+
+export const CREATE_REVIEW = gql`
+  mutation MyMutation (
+    $place_id: ID!
+    $review: String!
+    $stars: Int!
+    $user_id: ID!
+  ) {
+  insertReview(
+    place_id: $place_id,
+    review: $review,
+    stars: $stars,
+    user_id: $user_id,
+  ) {
+      stars
+      review
+      user {
+        name
+        image
+      }
+    }
+  }
+`;

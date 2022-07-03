@@ -374,7 +374,6 @@ type Mutation {
   insertReview(
     place_id: ID!
     review: String!
-    created_at: DateTime!
     stars: Int!
     user_id: ID!
   ): Review
