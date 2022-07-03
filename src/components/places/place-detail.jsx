@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
+import { useMutation } from '@apollo/client'
 
 import client from '../../apallo-client'
+import { CREATE_REVIEW } from '../../graphql/mutation'
 import { GET_PLACE } from '../../graphql/queries'
 import AuthContainer from '../../containers/auth'
+import Button from '../common/button'
 import star from '../../assets/images/star.svg'
 import starFill from '../../assets/images/star-fill.svg'
 
 const PlaceDetail = () => {
-  const { isAuthenticated } = AuthContainer.useContainer()
+  const { isAuthenticated, getUserInfo } = AuthContainer.useContainer()
   const { pathname } = useLocation()
 
   const [place, setPlace] = useState({
@@ -27,12 +30,22 @@ const PlaceDetail = () => {
     {point: false},
     {point: false},
   ])
+  const [review, setReview] = useState('')
+  const [userId, setUserId] = useState(null)
+  const [stars, setStars] = useState(0)
 
-  const id = pathname.split("/")[2];
+  const id = pathname.split("/")[2]
 
   useEffect(() => {
     getPlaceDetail()
   }, [])
+  
+  useEffect(() => {
+    const user = getUserInfo()
+    if(user !== undefined) {
+      setUserId(user.id)
+    }
+  }, [getUserInfo])
 
   const getPlaceDetail = async () => {
     const {
@@ -44,6 +57,31 @@ const PlaceDetail = () => {
       },
     })
     setPlace(getPlace)
+  }
+
+  const [createReview, { loading, error }] = useMutation(CREATE_REVIEW);
+
+  const createPlaceReview = async() => {
+    try {
+      const { data: { insertReview } } = await createReview({
+        variables: {place_id: id, review: review, stars: stars, user_id: userId  }
+      })
+      setReview('')
+      setStarPoints([
+        {point: false},
+        {point: false},
+        {point: false},
+        {point: false},
+        {point: false},
+      ])
+      let placeUpdate = {...place}
+      let cloneReviewList = [...place.reviewList]
+      cloneReviewList.push(insertReview)
+      placeUpdate.reviewList = cloneReviewList
+      setPlace(placeUpdate)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const loadStars = (stars) => {
@@ -79,6 +117,15 @@ const PlaceDetail = () => {
     let newArray = [...starPoints]
     newArray[index] = {...newArray[index], point: !newArray[index].point}
     setStarPoints(newArray)
+    if(newArray[index].point === true) {
+      setStars(parseInt(stars)+1)
+    }else {
+      setStars(parseInt(stars)-1)
+    }
+  }
+
+  const handleChange = (e) => {
+    setReview(e.target.value)
   }
 
   return (
@@ -116,8 +163,9 @@ const PlaceDetail = () => {
                 {loadStarPoints(starPoints)}
               </div>
               <div className="w-full">
-                <textarea id="review" name="review" className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-[#b1b845] focus:bg-white focus:ring-2 focus:ring-[#b1b845] h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                <textarea id="review" name="review" className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-[#b1b845] focus:bg-white focus:ring-2 focus:ring-[#b1b845] h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out mb-2" value={review} onChange={handleChange}></textarea>
               </div>
+              <Button title="Review" loading={loading} onClick={createPlaceReview} />
             </div>
           }
           {place.reviewList.length > 0 &&

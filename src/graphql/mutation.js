@@ -54,11 +54,15 @@ export const CREATE_REVIEW = gql`
     stars: $stars,
     user_id: $user_id,
   ) {
-      stars
+      id
+      created_at
       review
+      stars
       user {
         name
         image
+        country
+        created_at
       }
     }
   }
