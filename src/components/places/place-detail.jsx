@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
-import { AiOutlineStar, AiFillStar } from 'react-icons/ai'
 
 import client from '../../apallo-client'
 import { GET_PLACE } from '../../graphql/queries'
+import AuthContainer from '../../containers/auth'
+import star from '../../assets/images/star.svg'
+import starFill from '../../assets/images/star-fill.svg'
 
 const PlaceDetail = () => {
+  const { isAuthenticated } = AuthContainer.useContainer()
   const { pathname } = useLocation()
 
   const [place, setPlace] = useState({
@@ -17,6 +20,13 @@ const PlaceDetail = () => {
     description: "",
     reviewList: []
   })
+  const [starPoints, setStarPoints] = useState([
+    {point: false},
+    {point: false},
+    {point: false},
+    {point: false},
+    {point: false},
+  ])
 
   const id = pathname.split("/")[2];
 
@@ -41,14 +51,34 @@ const PlaceDetail = () => {
     const emptyStarsArray = [...Array(5-stars).keys()]
     return (
       <>
-        {starsArray.map(() =>
-          <AiFillStar className="text-[#b1b845]" />
+        {starsArray.map((index) =>
+        <img key={index} src={starFill} width="15" className="mr-1" />
         )}
-        {emptyStarsArray.map(() =>
-          <AiOutlineStar className="text-[#b1b845]" />
+        {emptyStarsArray.map((index) =>
+          <img key={index} src={star} width="15" className="mr-1" />
         )}
       </>
     )
+  }
+
+  const loadStarPoints = (stars) => {
+    return (
+      stars.map((s, index) =>
+        <img
+          key={index}
+          src={s.point ? starFill : star}
+          width="18"
+          className="mr-1 cursor-pointer"
+          onClick={() => handleToggle(index)}
+        />
+      )
+    )
+  }
+
+  const handleToggle = (index) => {
+    let newArray = [...starPoints]
+    newArray[index] = {...newArray[index], point: !newArray[index].point}
+    setStarPoints(newArray)
   }
 
   return (
@@ -68,32 +98,43 @@ const PlaceDetail = () => {
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
                 {place?.title}
               </h1>
-              <div className="flex mb-4">
-                <AiFillStar className="text-[#b1b845]" />
-                <AiFillStar className="text-[#b1b845]" />
-                <AiFillStar className="text-[#b1b845]" />
-                <AiFillStar className="text-[#b1b845]" />
-                <AiOutlineStar className="text-[#b1b845]" />
+              <div className="flex mb-4 pt-1">
+                <img src={starFill} width="18" className="mr-1" />
+                <img src={starFill} width="18" className="mr-1" />
+                <img src={starFill} width="18" className="mr-1" />
+                <img src={star} width="18" className="mr-1" />
               </div>
               <p className="leading-relaxed">{place.description}</p>
             </div>
           </div>
+          {(isAuthenticated() || place.reviewList.length > 0) &&
+            <p className="pt-10 lg:w-4/5 mx-auto flex flex-col font-medium text-xl text-gray-900">Reviews</p>
+          }
+          {isAuthenticated() &&
+            <div className="lg:w-4/5 mx-auto flex flex-wrap pt-5">
+              <div className="flex gap-1 mb-5">
+                {loadStarPoints(starPoints)}
+              </div>
+              <div className="w-full">
+                <textarea id="review" name="review" className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-[#b1b845] focus:bg-white focus:ring-2 focus:ring-[#b1b845] h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+              </div>
+            </div>
+          }
           {place.reviewList.length > 0 &&
             <>
-              <p className="pt-10 lg:w-4/5 mx-auto flex flex-col font-medium text-xl text-gray-900">Reviews</p>
               {place.reviewList.map((review) =>
-                <div className="pt-10 lg:w-4/5 mx-auto flex flex-col">
+                <div key={review.id} className="pt-5 lg:w-4/5 mx-auto flex flex-col">
                   <div className="flex items-center mb-4 space-x-4">
                     <img
                       className="w-10 h-10 rounded-full"
                       src={review.user.image}
                       alt={review.user.name}
                     />
-                    <div className="space-y-1 font-medium dark:text-white">
+                    <div className="space-y-1 font-medium">
                       <p>
                         {review.user.name}
                         <time
-                          className="block text-sm text-gray-500 dark:text-gray-400"
+                          className="block text-sm text-gray-500"
                         >
                           Joined on {moment(review.user.created_at).format('MMMM YYYY')}
                         </time>
@@ -103,7 +144,7 @@ const PlaceDetail = () => {
                   <div className="flex items-center mb-1">
                     {loadStars(review.stars)}
                   </div>
-                  <div className="mb-5 text-sm text-gray-500 dark:text-gray-400">
+                  <div className="mb-5 text-sm text-gray-500">
                     <p>
                       Reviewed in the {review.user.country} on
                       <time>
@@ -111,7 +152,7 @@ const PlaceDetail = () => {
                       </time>
                     </p>
                   </div>
-                  <p className="mb-2 font-light text-gray-500 dark:text-gray-400">
+                  <p className="mb-2 font-light text-gray-500">
                     {review.review}
                   </p>
                 </div>
