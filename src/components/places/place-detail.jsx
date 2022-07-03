@@ -4,7 +4,7 @@ import moment from 'moment'
 import { useMutation } from '@apollo/client'
 
 import client from '../../apallo-client'
-import { CREATE_REVIEW } from '../../graphql/mutation'
+import { CREATE_REVIEW, UPDATE_PLACE } from '../../graphql/mutation'
 import { GET_PLACE } from '../../graphql/queries'
 import AuthContainer from '../../containers/auth'
 import Button from '../common/button'
@@ -64,6 +64,7 @@ const PlaceDetail = () => {
   }
 
   const [createReview, { loading, error }] = useMutation(CREATE_REVIEW)
+  const [updatePlace] = useMutation(UPDATE_PLACE)
 
   const createPlaceReview = async () => {
     try {
@@ -90,6 +91,7 @@ const PlaceDetail = () => {
       cloneReviewList.push(insertReview)
       placeUpdate.reviewList = cloneReviewList
       setPlace(placeUpdate)
+      updatePlacePoints(stars, place.points)
     } catch (error) {
       console.log(error)
     }
@@ -120,6 +122,23 @@ const PlaceDetail = () => {
         onClick={() => handleToggle(index)}
       />
     ))
+  }
+
+  const updatePlacePoints = async(oldPoints, newPoint) => {
+    const point = oldPoints+newPoint
+    try {
+      const {
+        data: { updatePlace: updated },
+      } = await updatePlace({
+        variables: {
+          id: id,
+          points: point,
+        },
+      })
+      setPlace(updated)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handleToggle = (index) => {
@@ -162,7 +181,7 @@ const PlaceDetail = () => {
                 <div className="flex mb-4 pt-1">
                   {loadStars(
                     parseInt(
-                      place?.points !== undefined ? parseInt(place?.points) : 0
+                      (place?.points !== undefined && place.reviewList.length > 0) ? parseInt(place?.points)/place.reviewList.length : 0
                     )
                   )}
                 </div>

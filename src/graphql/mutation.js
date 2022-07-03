@@ -67,3 +67,33 @@ export const CREATE_REVIEW = gql`
     }
   }
 `;
+
+export const UPDATE_PLACE = gql`
+  mutation MyMutation (
+    $id: ID!,
+    $points: Float!
+  ) {
+    updatePlace(
+      id: $id,
+      points: $points
+    ) {
+      title
+      photo
+      location
+      description
+      points
+      reviewList {
+        id
+        created_at
+        review
+        stars
+        user {
+          name
+          image
+          country
+          created_at
+        }
+      }
+    }
+  }
+`;
