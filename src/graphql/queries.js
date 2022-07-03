@@ -19,6 +19,7 @@ export const GET_PLACE = gql`
     photo
     location
     description
+    points
     reviewList {
       id
       created_at
