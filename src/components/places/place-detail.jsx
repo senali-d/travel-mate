@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 import { useMutation } from '@apollo/client'
+import { Form } from 'antd'
 
 import client from '../../apallo-client'
 import { CREATE_REVIEW, UPDATE_PLACE } from '../../graphql/mutation'
@@ -11,10 +12,12 @@ import Button from '../common/button'
 import star from '../../assets/images/star.svg'
 import starFill from '../../assets/images/star-fill.svg'
 import Loader from '../common/loader'
+import FormInput from '../common/form-element/input-emement'
 
 const PlaceDetail = () => {
   const { isAuthenticated, getUserInfo } = AuthContainer.useContainer()
   const { pathname } = useLocation()
+  const [form] = Form.useForm()
 
   const [place, setPlace] = useState({
     id: "",
@@ -31,7 +34,6 @@ const PlaceDetail = () => {
     { point: false },
     { point: false },
   ])
-  const [review, setReview] = useState("")
   const [userId, setUserId] = useState(null)
   const [stars, setStars] = useState(0)
   const [isLoadingPlace, setIsLoadingPlace] = useState(true)
@@ -66,19 +68,19 @@ const PlaceDetail = () => {
   const [createReview, { loading, error }] = useMutation(CREATE_REVIEW)
   const [updatePlace] = useMutation(UPDATE_PLACE)
 
-  const createPlaceReview = async () => {
+  const createPlaceReview = async (value) => {
     try {
       const {
         data: { insertReview },
       } = await createReview({
         variables: {
           place_id: id,
-          review: review,
+          review: value.review,
           stars: stars,
           user_id: userId,
         },
       })
-      setReview("")
+      form.resetFields()
       setStarPoints([
         { point: false },
         { point: false },
@@ -92,6 +94,7 @@ const PlaceDetail = () => {
       placeUpdate.reviewList = cloneReviewList
       setPlace(placeUpdate)
       updatePlacePoints(stars, place.points)
+      setStars(0)
     } catch (error) {
       console.log(error)
     }
@@ -152,19 +155,26 @@ const PlaceDetail = () => {
     }
   }
 
-  const handleChange = (e) => {
-    setReview(e.target.value)
+  const handleSubmit = () => {
+    form
+    .validateFields()
+    .then((value) => {
+      createPlaceReview(value)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 
   return (
     <div>
       <section className="text-gray-600 body-font overflow-hidden">
         {isLoadingPlace ? (
-          <div className="container px-5 py-10 mx-auto flex justify-center">
+          <div className="container px-5 mx-auto flex justify-center">
             <Loader loading={isLoadingPlace} />
           </div>
         ) : (
-          <div className="container px-5 py-10 mx-auto">
+          <div className="container px-5 mx-auto">
             <div className="lg:w-4/5 mx-auto flex flex-wrap">
               <img
                 className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
@@ -198,20 +208,29 @@ const PlaceDetail = () => {
                 <div className="flex gap-1 mb-5">
                   {loadStarPoints(starPoints)}
                 </div>
-                <div className="w-full">
-                  <textarea
-                    id="review"
-                    name="review"
-                    className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-[#b1b845] focus:bg-white focus:ring-2 focus:ring-[#b1b845] h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out mb-2"
-                    value={review}
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
-                <Button
-                  title="Review"
-                  loading={loading}
-                  onClick={createPlaceReview}
-                />
+                <Form
+                  form={form}
+                  onFinish={handleSubmit}
+                  className="w-full flex flex-row flex-wrap gap-2"
+                >
+                  <div className="w-full">
+                    <FormInput
+                      name="review"
+                      type="textarea"
+                      placeholder="Please enter your review here..."
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your review",
+                        },
+                      ]}
+                    />
+                  </div>
+                  <Button
+                    title="Review"
+                    loading={loading}
+                  />
+                </Form>
               </div>
             )}
             {place.reviewList.length > 0 && (
