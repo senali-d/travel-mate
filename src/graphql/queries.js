@@ -62,3 +62,16 @@ export const GET_USER_BY_EMAIL = gql`
     }
   }
 `;
+
+export const GET_GUIDES = gql`
+  query MyQuery   {
+    getGuideList {
+      id
+      name
+      email
+      mobile
+      image
+      location
+    }
+  }
+`;
