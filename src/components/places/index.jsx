@@ -26,7 +26,7 @@ const Places = () => {
   }
 
   return (
-    <div className={`py-10 flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center ${loading || error ? 'lg:justify-center' : 'lg:justify-start'} lg:gap-x-7`}>
+    <div className={`flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center ${loading || error ? 'lg:justify-center' : 'lg:justify-start'} lg:gap-x-7`}>
       {
         loading ? <Loader loading={loading} /> :
         !error && places ? places.map(place => 
