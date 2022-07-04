@@ -13,6 +13,7 @@ import star from '../../assets/images/star.svg'
 import starFill from '../../assets/images/star-fill.svg'
 import Loader from '../common/loader'
 import FormInput from '../common/form-element/input-emement'
+import Map from "../common/map"
 
 const PlaceDetail = () => {
   const { isAuthenticated, getUserInfo } = AuthContainer.useContainer()
@@ -276,6 +277,9 @@ const PlaceDetail = () => {
                 ))}
               </>
             )}
+            <div className="lg:w-4/5 mx-auto flex flex-wrap pt-5 h-[300px]">
+              <Map lng={7.954337813918001} lat={80.75513568983209} />
+            </div>
           </div>
         )}
       </section>
