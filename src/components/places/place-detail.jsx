@@ -175,8 +175,8 @@ const PlaceDetail = () => {
             <Loader loading={isLoadingPlace} />
           </div>
         ) : (
-          <div className="container px-5 mx-auto">
-            <div className="lg:w-4/5 mx-auto flex flex-wrap">
+          <div className="container px-5 md:px-0 mx-auto">
+            <div className="mx-auto flex flex-wrap">
               <img
                 className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
                 alt={place.title}
@@ -200,12 +200,12 @@ const PlaceDetail = () => {
               </div>
             </div>
             {(isAuthenticated() || place.reviewList.length > 0) && (
-              <p className="pt-10 lg:w-4/5 mx-auto flex flex-col font-medium text-xl text-gray-900">
+              <p className="pt-10 mx-auto flex flex-col font-medium text-xl text-gray-900">
                 Reviews
               </p>
             )}
             {isAuthenticated() && (
-              <div className="lg:w-4/5 mx-auto flex flex-wrap pt-5">
+              <div className="mx-auto flex flex-wrap pt-5">
                 <div className="flex gap-1 mb-5">
                   {loadStarPoints(starPoints)}
                 </div>
@@ -239,7 +239,7 @@ const PlaceDetail = () => {
                 {place.reviewList.map((review) => (
                   <div
                     key={review.id}
-                    className="pt-5 lg:w-4/5 mx-auto flex flex-col"
+                    className="pt-5 mx-auto flex flex-col"
                   >
                     <div className="flex items-center mb-4 space-x-4">
                       <img
@@ -278,7 +278,7 @@ const PlaceDetail = () => {
               </>
             )}
             {(place.longitude && place.latitude) && 
-              <div className="lg:w-4/5 mx-auto flex flex-wrap pt-5 h-[300px]">
+              <div className="mx-auto flex flex-wrap pt-5 h-[300px]">
                 <Map lng={place.longitude} lat={place.latitude} />
               </div>
             }
