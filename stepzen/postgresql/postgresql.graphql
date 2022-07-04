@@ -59,7 +59,8 @@ type Place {
   created_at: DateTime
   description: String
   id: ID!
-  location: String
+  longitude: Float
+  latitude: Float
   photo: String
   photoList: [Photo] @materializer(query: "getPhotoUsingPlace_id")
   points: Float
