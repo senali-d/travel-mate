@@ -20,7 +20,8 @@ export const GET_PLACE = gql`
     getPlace(id: $id) {
     title
     photo
-    location
+    longitude
+    latitude
     description
     points
     reviewList {

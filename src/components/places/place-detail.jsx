@@ -277,9 +277,11 @@ const PlaceDetail = () => {
                 ))}
               </>
             )}
-            <div className="lg:w-4/5 mx-auto flex flex-wrap pt-5 h-[300px]">
-              <Map lng={7.954337813918001} lat={80.75513568983209} />
-            </div>
+            {(place.longitude && place.latitude) && 
+              <div className="lg:w-4/5 mx-auto flex flex-wrap pt-5 h-[300px]">
+                <Map lng={place.longitude} lat={place.latitude} />
+              </div>
+            }
           </div>
         )}
       </section>
