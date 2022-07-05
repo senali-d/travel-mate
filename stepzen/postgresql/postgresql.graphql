@@ -2,10 +2,10 @@ type Guide {
   created_at: DateTime
   email: String
   id: ID!
+  image: String
   location: String
   mobile: String
   name: String
-  image: String
 }
 
 type Hotel {
@@ -29,6 +29,7 @@ type Hotel {
   offer_id: ID
   photo: String
   points: Float
+  reviewList: [Review] @materializer(query: "getReviewUsingHotel_id")
 }
 
 type Offer {
@@ -60,8 +61,8 @@ type Place {
   created_at: DateTime
   description: String
   id: ID!
-  longitude: Float
   latitude: Float
+  longitude: Float
   photo: String
   photoList: [Photo] @materializer(query: "getPhotoUsingPlace_id")
   points: Float
@@ -71,6 +72,12 @@ type Place {
 
 type Review {
   created_at: DateTime
+  hotel: Hotel
+    @materializer(
+      query: "getHotel"
+      arguments: [{ name: "id", field: "hotel_id" }]
+    )
+  hotel_id: ID
   id: ID!
   place: Place
     @materializer(
@@ -142,6 +149,16 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+  getReviewUsingHotel_id(id: ID!): [Review]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."hotel_id", T."id", T."place_id", T."review", T."stars", T."user_id"
+        FROM "public"."review" T
+        WHERE T."hotel_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getOfferList: [Offer]
     @dbquery(
       type: "postgresql"
@@ -208,7 +225,7 @@ type Query {
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."id", T."place_id", T."review", T."stars", T."user_id"
+      SELECT T."created_at", T."hotel_id", T."id", T."place_id", T."review", T."stars", T."user_id"
         FROM "public"."review" T
         WHERE T."place_id" = $1
       """
@@ -254,7 +271,7 @@ type Query {
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."id", T."place_id", T."review", T."stars", T."user_id"
+      SELECT T."created_at", T."hotel_id", T."id", T."place_id", T."review", T."stars", T."user_id"
         FROM "public"."review" T
         WHERE T."user_id" = $1
       """
@@ -267,6 +284,7 @@ These are some examples of mutations generated from the schema. Feel free to mod
 """
 type Mutation {
   insertGuide(
+    image: String!
     created_at: DateTime!
     email: String!
     name: String!
@@ -353,10 +371,11 @@ type Mutation {
   insertPlace(
     created_at: DateTime!
     description: String!
-    photo: String!
     points: Float!
-    location: String!
+    latitude: Float!
     title: String!
+    longitude: Float!
+    photo: String!
   ): Place
     @dbquery(
       type: "postgresql"
@@ -388,6 +407,7 @@ type Mutation {
     place_id: ID!
     review: String!
     stars: Int!
+    hotel_id: ID!
     user_id: ID!
   ): Review
     @dbquery(
