@@ -16,10 +16,11 @@ const Profile = () => {
   
   const [profileImage, setProfileImage] = useState('')
   
-  const [updateUser, { loading, error }] = useMutation(UPDATE_USER)
+  const [updateUser, { loading, /* error */ }] = useMutation(UPDATE_USER)
 
   useEffect(() => {
     getProfile()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getProfile = async () => {

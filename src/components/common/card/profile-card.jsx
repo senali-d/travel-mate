@@ -8,7 +8,7 @@ const ProfileCard = ({ image, name, location, email, mobile }) => {
         <img
           className="mb-3 w-24 h-24 rounded-full shadow-lg object-cover"
           src={image}
-          alt="Bonnie image"
+          alt={name}
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900">
           {name}

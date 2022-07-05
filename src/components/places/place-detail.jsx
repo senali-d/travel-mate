@@ -43,6 +43,7 @@ const PlaceDetail = () => {
 
   useEffect(() => {
     getPlaceDetail()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const PlaceDetail = () => {
     setIsLoadingPlace(loading)
   }
 
-  const [createReview, { loading, error }] = useMutation(CREATE_REVIEW)
+  const [createReview, { loading, /* error */ }] = useMutation(CREATE_REVIEW)
   const [updatePlace] = useMutation(UPDATE_PLACE)
 
   const createPlaceReview = async (value) => {
@@ -107,10 +108,10 @@ const PlaceDetail = () => {
     return (
       <>
         {starsArray.map((index) => (
-          <img key={index} src={starFill} width="15" className="mr-1" />
+          <img key={index} alt="star" src={starFill} width="15" className="mr-1" />
         ))}
         {emptyStarsArray.map((index) => (
-          <img key={index} src={star} width="15" className="mr-1" />
+          <img key={index} alt="star" src={star} width="15" className="mr-1" />
         ))}
       </>
     )
@@ -124,6 +125,7 @@ const PlaceDetail = () => {
         width="18"
         className="mr-1 cursor-pointer"
         onClick={() => handleToggle(index)}
+        alt="star"
       />
     ))
   }

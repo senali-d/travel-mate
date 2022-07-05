@@ -16,6 +16,7 @@ const useAuth = () => {
 
   useEffect(() => {
     validateToken()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const signIn = async(response) => {
@@ -45,7 +46,7 @@ const useAuth = () => {
     const token = Storage.get(process.env.REACT_APP_LOCAL_STORAGE_TOKEN_IDENTIFIER)
     const userData = Storage.get(process.env.REACT_APP_LOCAL_STORAGE_USER_DATA_IDENTIFIER)
     const validation = checkForValidToken(token)
-    if(token, userData, validation) {
+    if(token && userData && validation) {
       setAuthenticated(true)
       setUserInfo(userData)
     }

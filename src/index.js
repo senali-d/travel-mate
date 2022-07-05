@@ -5,7 +5,7 @@ import { ApolloProvider } from '@apollo/client'
 import client from './apallo-client'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.min.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './index.css'
 
