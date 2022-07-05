@@ -27,9 +27,13 @@ const RouteRegistry = {
     path: '/profile',
     title: 'Profile',
   },
-  hotel: {
+  hotels: {
     path: '/hotel',
     title: 'Hotel',
+  },
+  hotelDetail: {
+    path: '/hotel/:id',
+    title: 'Hotel Detail'
   },
   atm: {
     path: '/atm',

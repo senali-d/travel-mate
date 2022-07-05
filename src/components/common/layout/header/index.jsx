@@ -35,7 +35,7 @@ const Header = () => {
         {
           key: '1',
           label: (
-            <Link to={RouteRegistry.hotel.path} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">{RouteRegistry.hotel.title}</Link>
+            <Link to={RouteRegistry.hotels.path} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">{RouteRegistry.hotels.title}</Link>
           ),
         },
         {
