@@ -76,3 +76,49 @@ export const GET_GUIDES = gql`
     }
   }
 `;
+
+export const GET_HOTELS = gql`
+  query MyQuery   {
+    getHotelList {
+      id
+      name
+      description
+      points
+      photo
+      reviewList {
+        id
+      }
+    }
+  }
+`;
+
+export const GET_HOTEL = gql`
+  query MyQuery($id: ID!) {
+    getHotel(id: $id) {
+      id
+      address
+      bedrooms
+      beds
+      description
+      fee
+      guests
+      latitude
+      longitude
+      name
+      photo
+      points
+      reviewList {
+        id
+        created_at
+        review
+        stars
+        user {
+          name
+          image
+          country
+          created_at
+        }
+      }
+    }
+  }
+`;
