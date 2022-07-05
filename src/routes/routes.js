@@ -16,6 +16,7 @@ import AdminGuides from '../components/admin/guides'
 import PrivateRoute from './private-routes'
 import Profile from '../components/profile'
 import PlaceDetail from '../components/places/place-detail'
+import Hotel from '../components/hotel'
 
 const AllRoutes = () => {
   return (
@@ -23,10 +24,11 @@ const AllRoutes = () => {
       <Route exact element={<Layout />} >
         <Route index element={<Home />} />
         <Route path={RouteRegistry.places.path} element={<Places />} />
+        <Route path={RouteRegistry.placeDetail.path} element={<PlaceDetail />} />
         <Route path={RouteRegistry.guides.path} element={<Guides />} />
         <Route path={RouteRegistry.about.path} element={<About />} />
         <Route path={RouteRegistry.contact.path} element={<Contact />} />
-        <Route path={RouteRegistry.placeDetail.path} element={<PlaceDetail />} />
+        <Route path={RouteRegistry.hotels.path}element={<Hotel />} />
         <Route 
           path={RouteRegistry.profile.path} 
           element={
