@@ -12,6 +12,7 @@ export const CREATE_USER = gql`
       email
       id
       role
+      image
     }
   }
 `;

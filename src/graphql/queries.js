@@ -59,6 +59,7 @@ export const GET_USER_BY_EMAIL = gql`
       email
       role
       id
+      image
     }
   }
 `;
