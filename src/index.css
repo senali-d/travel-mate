@@ -7,3 +7,15 @@
 * {
   box-sizing: border-box;
 }
+
+/* Custom style antd */
+.ant-dropdown-menu {
+  background-color: rgb(238 242 255 / 1);
+}
+.ant-dropdown-menu-item {
+  background-color: rgb(238 242 255 / 1) !important;
+  color: rgb(55 65 81 / 1);
+}
+.ant-dropdown-menu-item:hover {
+  color: #b1b845;
+}

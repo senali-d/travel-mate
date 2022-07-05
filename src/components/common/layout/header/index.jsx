@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { Dropdown, Menu } from 'antd'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { BsGoogle } from 'react-icons/bs'
 import { FaUserCircle } from 'react-icons/fa'
+import { RiArrowDropDownLine } from 'react-icons/ri'
 import { GoogleLogin } from 'react-google-login'
 
 import AuthContainer from '../../../../containers/auth'
@@ -15,7 +17,7 @@ const Header = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false)
   const [dropdown, setDropdown] = useState(false)
   const [userInfo, setUserInfo] = useState()
-  
+
   useEffect(() => {
     const user = getUserInfo()
     if(user !== undefined) {
@@ -26,6 +28,25 @@ const Header = () => {
   const toggleDropdown = () => {
     setDropdown(!dropdown)
   }
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          key: '1',
+          label: (
+            <Link to={RouteRegistry.hotel.path} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">{RouteRegistry.hotel.title}</Link>
+          ),
+        },
+        {
+          key: '2',
+          label: (
+            <Link to={RouteRegistry.atm.path} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">{RouteRegistry.atm.title}</Link>
+          ),
+        },
+      ]}
+    />
+  );
 
   return (
     <nav className="fixed z-10 w-full mx-auto bg-indigo-50 border-gray-200 px-2 sm:px-4 py-2.5 rounded shadow">
@@ -39,12 +60,12 @@ const Header = () => {
           {isAuthenticated() ? 
             <>
               {userInfo ? 
-                <img src={userInfo.image} alt={userInfo.name} width="30" height="30" className="rounded-full ml-4 cursor-pointer" onClick={toggleDropdown} /> :
+                <img src={userInfo.image} alt={userInfo.name} className="rounded-full ml-4 cursor-pointer w-8 h-8" onClick={toggleDropdown} /> :
                 <FaUserCircle onClick={toggleDropdown} className=" flex self-center text:lg md:text-2xl text-[#6d86a8] cursor-pointer ml-4" size={30} />
               }
               <div className={`origin-top-right absolute right-0 top-[52px] w-48 rounded-md shadow-lg bg-indigo-50 ring-1 ring-black ring-opacity-5 focus:outline-none transform transition-transform ${dropdown ? 'flex' : 'hidden'}`}>
                 <div className="py-1" role="none">
-                  <Link to="/profile" className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">My Profile</Link>
+                  <Link to={RouteRegistry.profile.path} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">{RouteRegistry.profile.title}</Link>
                   <button type="submit" className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:text-[#b1b845]" onClick={logOut}>Sign out</button>
                 </div>
               </div>
@@ -82,20 +103,23 @@ const Header = () => {
           } justify-between items-center w-full md:flex md:w-auto md:order-1`}
         >
           <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-            <li>
+            <li className="flex items-center">
               <Link to={RouteRegistry.places.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.places.path ? 'md:text-[#b1b845] text-white bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
                 {RouteRegistry.places.title}
               </Link>
             </li>
-            <li>
+            <li className="flex items-center">
               <Link to={RouteRegistry.guides.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.guides.path ? 'md:text-[#b1b845] text-white bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
                 {RouteRegistry.guides.title}
               </Link>
             </li>
-            <li>
-              <span className="block py-2 pr-4 pl-3 text-[#6d86a8] border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#b1b845] md:p-0 hover:cursor-pointer">
-                Other
-              </span>
+            <li className="hidden md:flex">
+              <Dropdown overlay={menu}>
+                <span className="flex items-center py-2 pr-4 pl-3 text-[#6d86a8] border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#b1b845] md:p-0 hover:cursor-pointer">
+                  <div>Services</div>
+                  <RiArrowDropDownLine size={28} />
+                </span>
+              </Dropdown>
             </li>
           </ul>
         </div>
