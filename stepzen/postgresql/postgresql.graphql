@@ -68,6 +68,12 @@ type Place {
   points: Float
   reviewList: [Review] @materializer(query: "getReviewUsingPlace_id")
   title: String
+  user: User
+    @materializer(
+      query: "getUser"
+      arguments: [{ name: "id", field: "user_id" }]
+    )
+  user_id: ID
 }
 
 type Review {
@@ -103,6 +109,7 @@ type User {
   image: String
   mobile: String
   name: String
+  placeList: [Place] @materializer(query: "getPlaceUsingUser_id")
   reviewList: [Review] @materializer(query: "getReviewUsingUser_id")
   role: String
 }
@@ -267,6 +274,16 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+  getPlaceUsingUser_id(id: ID!): [Place]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."description", T."id", T."latitude", T."longitude", T."photo", T."points", T."title", T."user_id"
+        FROM "public"."place" T
+        WHERE T."user_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getReviewUsingUser_id(id: ID!): [Review]
     @dbquery(
       type: "postgresql"
@@ -374,6 +391,7 @@ type Mutation {
     points: Float!
     latitude: Float!
     title: String!
+    user_id: ID!
     longitude: Float!
     photo: String!
   ): Place
