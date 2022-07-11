@@ -15,7 +15,6 @@ const Header = () => {
   const { pathname } = useLocation()
   
   const [isOpenMenu, setIsOpenMenu] = useState(false)
-  const [dropdown, setDropdown] = useState(false)
   const [userInfo, setUserInfo] = useState()
 
   useEffect(() => {
@@ -25,10 +24,6 @@ const Header = () => {
     }
   }, [getUserInfo])
   
-  const toggleDropdown = () => {
-    setDropdown(!dropdown)
-  }
-
   const menu = (
     <Menu
       items={[
@@ -48,6 +43,31 @@ const Header = () => {
     />
   );
 
+  const profileMenu = (
+    <Menu
+      items={[
+        {
+          key: '1',
+          label: (
+            <Link to={RouteRegistry.profile.path} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">{RouteRegistry.profile.title}</Link>
+          ),
+        },
+        {
+          key: '2',
+          label: (
+            <Link to={RouteRegistry.myPlaces.path} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">{RouteRegistry.myPlaces.title}</Link>
+          ),
+        },
+        {
+          key: '3',
+          label: (
+            <div onClick={logOut} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">Sign Out</div>
+          ),
+        },
+      ]}
+    />
+  );
+
   return (
     <nav className="fixed z-10 w-full mx-auto bg-indigo-50 border-gray-200 px-2 sm:px-4 py-2.5 rounded shadow">
       <div className="max-w-[1080px] container flex flex-wrap justify-between items-center mx-auto">
@@ -59,16 +79,12 @@ const Header = () => {
         <div className="flex md:order-2">
           {isAuthenticated() ? 
             <>
+              <Dropdown overlay={profileMenu}>
               {userInfo ? 
-                <img src={userInfo.image} alt={userInfo.name} className="rounded-full ml-4 cursor-pointer w-8 h-8" onClick={toggleDropdown} /> :
-                <FaUserCircle onClick={toggleDropdown} className=" flex self-center text:lg md:text-2xl text-[#6d86a8] cursor-pointer ml-4" size={30} />
-              }
-              <div className={`origin-top-right absolute right-0 top-[52px] w-48 rounded-md shadow-lg bg-indigo-50 ring-1 ring-black ring-opacity-5 focus:outline-none transform transition-transform ${dropdown ? 'flex' : 'hidden'}`}>
-                <div className="py-1" role="none">
-                  <Link to={RouteRegistry.profile.path} className="text-gray-700 block px-4 py-2 text-sm hover:text-[#b1b845]">{RouteRegistry.profile.title}</Link>
-                  <button type="submit" className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:text-[#b1b845]" onClick={logOut}>Sign out</button>
-                </div>
-              </div>
+                  <img src={userInfo.image} alt={userInfo.name} className="rounded-full ml-4 cursor-pointer w-8 h-8" /> :
+                  <FaUserCircle className=" flex self-center text:lg md:text-2xl text-[#6d86a8] cursor-pointer ml-4" size={30} />
+                }
+              </Dropdown>
             </> :
             <GoogleLogin
               clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
