@@ -33,7 +33,7 @@ const Hotel = () => {
           <ImageCard 
             key={hotel.id}
             image={hotel.photo}
-            title={hotel.title} 
+            title={hotel.name} 
             description={hotel.description}
             stars={starPoints(hotel)}
             onClick={() => handleRedirect(hotel.id)}
