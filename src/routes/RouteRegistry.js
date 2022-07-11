@@ -7,6 +7,10 @@ const RouteRegistry = {
     path: '/place',
     title: 'Places',
   },
+  myPlaces: {
+    path: '/my-place',
+    title: 'My places',
+  },
   placeDetail: {
     path: '/place/:id',
     title: 'Place Detail'
@@ -25,7 +29,7 @@ const RouteRegistry = {
   },
   profile: {
     path: '/profile',
-    title: 'Profile',
+    title: 'My Profile',
   },
   hotels: {
     path: '/hotel',

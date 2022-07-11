@@ -18,6 +18,7 @@ import Profile from '../components/profile'
 import PlaceDetail from '../components/places/place-detail'
 import Hotel from '../components/hotel'
 import HotelDetail from '../components/hotel/hotel-detail'
+import MyPlaces from '../components/places/my-places'
 
 const AllRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AllRoutes = () => {
         <Route index element={<Home />} />
         <Route path={RouteRegistry.places.path} element={<Places />} />
         <Route path={RouteRegistry.placeDetail.path} element={<PlaceDetail />} />
+        <Route path={RouteRegistry.myPlaces.path} element={<MyPlaces />} />
         <Route path={RouteRegistry.guides.path} element={<Guides />} />
         <Route path={RouteRegistry.about.path} element={<About />} />
         <Route path={RouteRegistry.contact.path} element={<Contact />} />
