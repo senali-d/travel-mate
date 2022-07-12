@@ -27,7 +27,6 @@ const AllRoutes = () => {
         <Route index element={<Home />} />
         <Route path={RouteRegistry.places.path} element={<Places />} />
         <Route path={RouteRegistry.placeDetail.path} element={<PlaceDetail />} />
-        <Route path={RouteRegistry.myPlaces.path} element={<MyPlaces />} />
         <Route path={RouteRegistry.guides.path} element={<Guides />} />
         <Route path={RouteRegistry.about.path} element={<About />} />
         <Route path={RouteRegistry.contact.path} element={<Contact />} />
@@ -40,6 +39,14 @@ const AllRoutes = () => {
               <Profile />
             </PrivateRoute>
           }
+        />
+        <Route 
+          path={RouteRegistry.myPlaces.path} 
+          element={
+            <PrivateRoute role={Roles.TRAVELLER}>
+              <MyPlaces />
+            </PrivateRoute>
+          } 
         />
         <Route path="*" element={<NotFound />} />
       </Route>

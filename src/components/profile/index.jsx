@@ -111,7 +111,7 @@ const Profile = () => {
                 src={profileImage !== '' ? profileImage : userImage}
                 alt={username}
               />
-              <label for="file-upload" className="w-24 h-24 rounded-full" />
+              <label htmlFor="file-upload" className="w-24 h-24 rounded-full" />
               <input
                 className="invisible"
                 type="file"

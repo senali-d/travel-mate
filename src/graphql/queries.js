@@ -40,6 +40,17 @@ export const GET_PLACE = gql`
   }
 `;
 
+export const GET_PLACES_BY_ID = gql`
+  query MyQuery($user_id: ID!) {
+    getPlaceListById(user_id: $user_id) {
+      id
+      title
+      description
+      photo
+    }
+  }
+`;
+
 export const GET_USER_BY_ID = gql`
   query MyQuery($id: ID!) {
     getUser(id: $id) {

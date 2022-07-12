@@ -218,6 +218,14 @@ type Query {
       table: "place"
       configuration: "postgresql_config"
     )
+  getPlaceListById(user_id: ID!): [Place]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "place" where "user_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getPhotoUsingPlace_id(id: ID!): [Photo]
     @dbquery(
       type: "postgresql"
