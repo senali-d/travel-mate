@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client'
 import { Form } from 'antd'
 
 import client from '../../apallo-client'
-import { CREATE_REVIEW, UPDATE_PLACE } from '../../graphql/mutation'
+import { CREATE_HOTEL_REVIEW, UPDATE_HOTEL_POINT, UPDATE_PLACE } from '../../graphql/mutation'
 import { GET_HOTEL } from '../../graphql/queries'
 import AuthContainer from '../../containers/auth'
 import Button from '../common/button'
@@ -26,7 +26,7 @@ const HotelDetail = () => {
     photo: "",
     location: "",
     description: "",
-    reviewList: [],
+    hotel_reviewList: [],
   })
   const [starPoints, setStarPoints] = useState([
     { point: false },
@@ -67,40 +67,40 @@ const HotelDetail = () => {
     setIsLoadingPlace(loading)
   }
 
-  const [createReview, { loading /* error */ }] = useMutation(CREATE_REVIEW)
-  const [updatePlace] = useMutation(UPDATE_PLACE)
+  const [createReview, { loading /* error */ }] = useMutation(CREATE_HOTEL_REVIEW)
+  const [updateHotelPoint] = useMutation(UPDATE_HOTEL_POINT)
 
-  // const createPlaceReview = async (value) => {
-  //   try {
-  //     const {
-  //       data: { insertReview },
-  //     } = await createReview({
-  //       variables: {
-  //         place_id: id,
-  //         review: value.review,
-  //         stars: stars,
-  //         user_id: userId,
-  //       },
-  //     })
-  //     form.resetFields()
-  //     setStarPoints([
-  //       { point: false },
-  //       { point: false },
-  //       { point: false },
-  //       { point: false },
-  //       { point: false },
-  //     ])
-  //     let placeUpdate = { ...place }
-  //     let cloneReviewList = [...place.reviewList]
-  //     cloneReviewList.push(insertReview)
-  //     placeUpdate.reviewList = cloneReviewList
-  //     setHotel(placeUpdate)
-  //     updatePlacePoints(stars, place.points)
-  //     setStars(0)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+  const createHotelReview = async (value) => {
+    try {
+      const {
+        data: { insertHotel_review },
+      } = await createReview({
+        variables: {
+          hotel_id: id,
+          review: value.review,
+          stars: stars,
+          user_id: userId,
+        },
+      })
+      form.resetFields()
+      setStarPoints([
+        { point: false },
+        { point: false },
+        { point: false },
+        { point: false },
+        { point: false },
+      ])
+      let hotelUpdate = { ...hotel }
+      let clonehotel_reviewList = [...hotel.hotel_reviewList]
+      clonehotel_reviewList.push(insertHotel_review)
+      hotelUpdate.hotel_reviewList = clonehotel_reviewList
+      setHotel(hotelUpdate)
+      updateHotelPoints(stars, hotel.points)
+      setStars(0)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const loadStars = (stars) => {
     const starsArray = [...Array(stars).keys()]
@@ -136,12 +136,12 @@ const HotelDetail = () => {
     ))
   }
 
-  const updatePlacePoints = async (oldPoints, newPoint) => {
+  const updateHotelPoints = async (oldPoints, newPoint) => {
     const point = oldPoints + newPoint
     try {
       const {
-        data: { updatePlace: updated },
-      } = await updatePlace({
+        data: { updateHotelPoint: updated },
+      } = await updateHotelPoint({
         variables: {
           id: id,
           points: point,
@@ -168,7 +168,7 @@ const HotelDetail = () => {
     form
       .validateFields()
       .then((value) => {
-        // createPlaceReview(value)
+        createHotelReview(value)
       })
       .catch((err) => {
         console.log(err)
@@ -203,8 +203,8 @@ const HotelDetail = () => {
                 <div className="flex mb-4 pt-1">
                   {loadStars(
                     parseInt(
-                      hotel?.points !== undefined && hotel.reviewList.length > 0
-                        ? parseInt(hotel?.points) / hotel.reviewList.length
+                      hotel?.points !== undefined && hotel.hotel_reviewList.length > 0
+                        ? parseInt(hotel?.points) / hotel.hotel_reviewList.length
                         : 0
                     )
                   )}
@@ -225,7 +225,7 @@ const HotelDetail = () => {
                         {hotel.points}
                       </h2>
                       <h2 class="text-sm flex tracking-widest title-font mb-5 font-medium">
-                        {hotel.reviewList.length} reviews
+                        {hotel.hotel_reviewList.length} reviews
                       </h2>
                     </div>
                     <h1 class="text-5xl text-gray-900 leading-none flex items-center pb-4 mb-4 border-b border-gray-200">
@@ -262,7 +262,7 @@ const HotelDetail = () => {
                 </div>
               </div>
             </div>
-            {(isAuthenticated() || hotel.reviewList.length > 0) && (
+            {(isAuthenticated() || hotel.hotel_reviewList.length > 0) && (
               <p className="pt-10 mx-auto flex flex-col font-medium text-xl text-gray-900">
                 Reviews
               </p>
@@ -294,9 +294,9 @@ const HotelDetail = () => {
                 </Form>
               </div>
             )}
-            {hotel.reviewList.length > 0 && (
+            {hotel.hotel_reviewList.length > 0 && (
               <>
-                {hotel.reviewList.map((review) => (
+                {hotel.hotel_reviewList.map((review) => (
                   <div key={review.id} className="pt-5 mx-auto flex flex-col">
                     <div className="flex items-center mb-4 space-x-4">
                       <img

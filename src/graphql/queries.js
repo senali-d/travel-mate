@@ -97,7 +97,7 @@ export const GET_HOTELS = gql`
       description
       points
       photo
-      reviewList {
+      hotel_reviewList {
         id
       }
     }
@@ -119,7 +119,7 @@ export const GET_HOTEL = gql`
       name
       photo
       points
-      reviewList {
+      hotel_reviewList {
         id
         created_at
         review

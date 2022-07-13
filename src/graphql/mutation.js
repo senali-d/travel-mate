@@ -155,3 +155,67 @@ export const CREATE_PLACE = gql`
     }
   }
 `;
+
+export const CREATE_HOTEL_REVIEW = gql`
+  mutation MyMutation (
+    $hotel_id: ID!
+    $review: String!
+    $stars: Int!
+    $user_id: ID!
+  ) {
+  insertHotel_review(
+    hotel_id: $hotel_id,
+    review: $review,
+    stars: $stars,
+    user_id: $user_id,
+  ) {
+      id
+      created_at
+      review
+      stars
+      user {
+        name
+        image
+        country
+        created_at
+      }
+    }
+  }
+`;
+
+export const UPDATE_HOTEL_POINT = gql`
+  mutation MyMutation (
+    $id: ID!,
+    $points: Float!
+  ) {
+    updateHotelPoint(
+      id: $id,
+      points: $points
+    ) {
+      id
+      address
+      bedrooms
+      beds
+      description
+      fee
+      guests
+      latitude
+      longitude
+      name
+      photo
+      points
+      hotel_reviewList {
+        id
+        created_at
+        review
+        stars
+        user {
+          name
+          image
+          country
+          created_at
+        }
+      }
+    }
+  }
+`;

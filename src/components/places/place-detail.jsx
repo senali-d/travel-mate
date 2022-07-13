@@ -68,7 +68,7 @@ const PlaceDetail = () => {
   }
 
   const [createReview, { loading, /* error */ }] = useMutation(CREATE_REVIEW)
-  const [updatePlace] = useMutation(UPDATE_PLACE_POINT)
+  const [updatePlacePoint] = useMutation(UPDATE_PLACE_POINT)
 
   const createPlaceReview = async (value) => {
     try {
@@ -134,8 +134,8 @@ const PlaceDetail = () => {
     const point = oldPoints+newPoint
     try {
       const {
-        data: { updatePlace: updated },
-      } = await updatePlace({
+        data: { updatePlacePoint: updated },
+      } = await updatePlacePoint({
         variables: {
           id: id,
           points: point,
@@ -181,13 +181,13 @@ const PlaceDetail = () => {
             <div className="mx-auto flex flex-wrap">
               <img
                 className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-                alt={place.title}
+                alt={place?.title}
                 src={place?.photo}
               />
               <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                <h2 className="text-sm title-font text-gray-500 tracking-widest">
+                {/* <h2 className="text-sm title-font text-gray-500 tracking-widest">
                   {place.location}
-                </h2>
+                </h2> */}
                 <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
                   {place?.title}
                 </h1>
@@ -198,10 +198,10 @@ const PlaceDetail = () => {
                     )
                   )}
                 </div>
-                <p className="leading-relaxed">{place.description}</p>
+                <p className="leading-relaxed">{place?.description}</p>
               </div>
             </div>
-            {(isAuthenticated() || place.reviewList.length > 0) && (
+            {(isAuthenticated() || place?.reviewList.length > 0) && (
               <p className="pt-10 mx-auto flex flex-col font-medium text-xl text-gray-900">
                 Reviews
               </p>
@@ -236,9 +236,9 @@ const PlaceDetail = () => {
                 </Form>
               </div>
             )}
-            {place.reviewList.length > 0 && (
+            {place?.reviewList.length > 0 && (
               <>
-                {place.reviewList.map((review) => (
+                {place?.reviewList.map((review) => (
                   <div
                     key={review.id}
                     className="pt-5 mx-auto flex flex-col"
@@ -279,9 +279,9 @@ const PlaceDetail = () => {
                 ))}
               </>
             )}
-            {(place.longitude && place.latitude) && 
+            {(place?.longitude && place.latitude) && 
               <div className="mx-auto flex flex-wrap pt-5 h-[300px]">
-                <Map lng={place.longitude} lat={place.latitude} />
+                <Map lng={place?.longitude} lat={place?.latitude} />
               </div>
             }
           </div>

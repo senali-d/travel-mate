@@ -17,9 +17,9 @@ const Hotel = () => {
     navigate(`${RouteRegistry.hotels.path}/${id}`)
   }
 
-  const starPoints = ({ points, reviewList }) => {
-    if(reviewList.length > 0) {
-      return points/reviewList.length
+  const starPoints = ({ points, hotel_reviewList }) => {
+    if(hotel_reviewList.length > 0) {
+      return points/hotel_reviewList.length
     }else {
       return points
     }
