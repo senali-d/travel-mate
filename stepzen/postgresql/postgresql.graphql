@@ -16,6 +16,8 @@ type Hotel {
   description: String
   fee: Float
   guests: Int
+  hotel_reviewList: [Hotel_review]
+    @materializer(query: "getHotel_reviewUsingHotel_id")
   id: ID!
   latitude: Float
   longitude: Float
@@ -29,7 +31,25 @@ type Hotel {
   offer_id: ID
   photo: String
   points: Float
-  reviewList: [Review] @materializer(query: "getReviewUsingHotel_id")
+}
+
+type Hotel_review {
+  created_at: DateTime
+  hotel: Hotel
+    @materializer(
+      query: "getHotel"
+      arguments: [{ name: "id", field: "hotel_id" }]
+    )
+  hotel_id: ID
+  id: ID!
+  review: String
+  stars: Int
+  user: User
+    @materializer(
+      query: "getUser"
+      arguments: [{ name: "id", field: "user_id" }]
+    )
+  user_id: ID
 }
 
 type Offer {
@@ -78,12 +98,6 @@ type Place {
 
 type Review {
   created_at: DateTime
-  hotel: Hotel
-    @materializer(
-      query: "getHotel"
-      arguments: [{ name: "id", field: "hotel_id" }]
-    )
-  hotel_id: ID
   id: ID!
   place: Place
     @materializer(
@@ -105,6 +119,8 @@ type User {
   country: String
   created_at: DateTime
   email: String
+  hotel_reviewList: [Hotel_review]
+    @materializer(query: "getHotel_reviewUsingUser_id")
   id: ID!
   image: String
   mobile: String
@@ -146,6 +162,16 @@ type Query {
       table: "hotel"
       configuration: "postgresql_config"
     )
+  getHotel_reviewUsingHotel_id(id: ID!): [Hotel_review]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."hotel_id", T."id", T."review", T."stars", T."user_id"
+        FROM "public"."hotel_review" T
+        WHERE T."hotel_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getOfferUsingHotel_id(id: ID!): [Offer]
     @dbquery(
       type: "postgresql"
@@ -156,14 +182,18 @@ type Query {
       """
       configuration: "postgresql_config"
     )
-  getReviewUsingHotel_id(id: ID!): [Review]
+  getHotel_reviewList: [Hotel_review]
     @dbquery(
       type: "postgresql"
-      query: """
-      SELECT T."created_at", T."hotel_id", T."id", T."place_id", T."review", T."stars", T."user_id"
-        FROM "public"."review" T
-        WHERE T."hotel_id" = $1
-      """
+      schema: "public"
+      table: "hotel_review"
+      configuration: "postgresql_config"
+    )
+  getHotel_review(id: ID!): Hotel_review
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "hotel_review"
       configuration: "postgresql_config"
     )
   getOfferList: [Offer]
@@ -240,7 +270,7 @@ type Query {
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."hotel_id", T."id", T."place_id", T."review", T."stars", T."user_id"
+      SELECT T."created_at", T."id", T."place_id", T."review", T."stars", T."user_id"
         FROM "public"."review" T
         WHERE T."place_id" = $1
       """
@@ -274,6 +304,16 @@ type Query {
       table: "user"
       configuration: "postgresql_config"
     )
+  getHotel_reviewUsingUser_id(id: ID!): [Hotel_review]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."hotel_id", T."id", T."review", T."stars", T."user_id"
+        FROM "public"."hotel_review" T
+        WHERE T."user_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getUserByEmail(email: String!): User
     @dbquery(
       type: "postgresql"
@@ -296,7 +336,7 @@ type Query {
     @dbquery(
       type: "postgresql"
       query: """
-      SELECT T."created_at", T."hotel_id", T."id", T."place_id", T."review", T."stars", T."user_id"
+      SELECT T."created_at", T."id", T."place_id", T."review", T."stars", T."user_id"
         FROM "public"."review" T
         WHERE T."user_id" = $1
       """
@@ -353,11 +393,43 @@ type Mutation {
       dml: INSERT
       configuration: "postgresql_config"
     )
+  insertHotelPoint(
+    id: ID!
+    points: Float!
+  ): Hotel
+    @dbquery(
+      type: "postgresql"
+      query: """
+      update "hotel" SET "points" = $2 WHERE "id" = $1 RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
   deleteHotel(id: ID!): Hotel
     @dbquery(
       type: "postgresql"
       schema: "public"
       table: "hotel"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertHotel_review(
+    review: String!
+    stars: Int!
+    hotel_id: ID!
+    user_id: ID!
+  ): Hotel_review
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "hotel_review"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteHotel_review(id: ID!): Hotel_review
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "hotel_review"
       dml: DELETE
       configuration: "postgresql_config"
     )
@@ -447,7 +519,6 @@ type Mutation {
     place_id: ID!
     review: String!
     stars: Int!
-    hotel_id: ID!
     user_id: ID!
   ): Review
     @dbquery(
