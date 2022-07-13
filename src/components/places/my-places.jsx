@@ -45,7 +45,7 @@ const MyPlaces = () => {
   const getPlace = async (placeId) => {
     const {
       data: { getPlace },
-      loading,
+      /* loading, */
     } = await client.query({
       query: GET_PLACE,
       variables: {
@@ -99,8 +99,8 @@ const MyPlaces = () => {
       .catch((err) => console.log(err))
   }
 
-  const [createPlace, { loading: createLoading, error: createError }] = useMutation(CREATE_PLACE)
-  const [updatePlace, { loading, error }] = useMutation(UPDATE_PLACE)
+  const [createPlace, { loading: createLoading, /* error: createError */ }] = useMutation(CREATE_PLACE)
+  const [updatePlace, { loading, /* error */ }] = useMutation(UPDATE_PLACE)
 
 
   const handleSubmit = () => {
@@ -158,7 +158,7 @@ const MyPlaces = () => {
   const successHandlerCreateUpdate = (newPlace) => {
     if(isEdit) {
       const clonePlaces = [...places]
-      const objIndex = clonePlaces.findIndex((obj => obj.id == newPlace.id));
+      const objIndex = clonePlaces.findIndex((obj => obj.id === newPlace.id));
       
       console.log("Before update: ", clonePlaces[objIndex])
 

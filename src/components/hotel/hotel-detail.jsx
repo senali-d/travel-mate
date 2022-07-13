@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client'
 import { Form } from 'antd'
 
 import client from '../../apallo-client'
-import { CREATE_HOTEL_REVIEW, UPDATE_HOTEL_POINT, UPDATE_PLACE } from '../../graphql/mutation'
+import { CREATE_HOTEL_REVIEW, UPDATE_HOTEL_POINT } from '../../graphql/mutation'
 import { GET_HOTEL } from '../../graphql/queries'
 import AuthContainer from '../../containers/auth'
 import Button from '../common/button'
