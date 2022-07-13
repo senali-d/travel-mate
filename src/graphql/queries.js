@@ -18,6 +18,7 @@ export const GET_PLACES = gql`
 export const GET_PLACE = gql`
   query MyQuery($id: ID!) {
     getPlace(id: $id) {
+    id
     title
     photo
     longitude

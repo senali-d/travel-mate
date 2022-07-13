@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client'
 import { Form } from 'antd'
 
 import client from '../../apallo-client'
-import { CREATE_REVIEW, UPDATE_PLACE } from '../../graphql/mutation'
+import { CREATE_REVIEW, UPDATE_PLACE_POINT } from '../../graphql/mutation'
 import { GET_PLACE } from '../../graphql/queries'
 import AuthContainer from '../../containers/auth'
 import Button from '../common/button'
@@ -68,7 +68,7 @@ const PlaceDetail = () => {
   }
 
   const [createReview, { loading, /* error */ }] = useMutation(CREATE_REVIEW)
-  const [updatePlace] = useMutation(UPDATE_PLACE)
+  const [updatePlace] = useMutation(UPDATE_PLACE_POINT)
 
   const createPlaceReview = async (value) => {
     try {

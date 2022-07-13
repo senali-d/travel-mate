@@ -69,19 +69,20 @@ export const CREATE_REVIEW = gql`
   }
 `;
 
-export const UPDATE_PLACE = gql`
+export const UPDATE_PLACE_POINT = gql`
   mutation MyMutation (
     $id: ID!,
     $points: Float!
   ) {
-    updatePlace(
+    updatePlacePoint(
       id: $id,
       points: $points
     ) {
       title
-      photo
-      location
       description
+      photo
+      longitude
+      latitude
       points
       reviewList {
         id
@@ -95,6 +96,62 @@ export const UPDATE_PLACE = gql`
           created_at
         }
       }
+    }
+  }
+`;
+
+export const UPDATE_PLACE = gql`
+  mutation MyMutation (
+    $id: ID!,
+    $title: String!
+    $description: String!
+    $photo: String!
+    $latitude: Float!
+    $longitude: Float!
+  ) {
+    updatePlace(
+      id: $id,
+      title: $title
+      description: $description
+      photo: $photo
+      latitude: $latitude
+      longitude: $longitude
+    ) {
+      id
+      title
+      description
+      photo
+      latitude
+      longitude
+    }
+  }
+`;
+
+export const CREATE_PLACE = gql`
+  mutation MyMutation (
+    $title: String!
+    $description: String!
+    $photo: String!
+    $latitude: Float!
+    $longitude: Float!
+    $points: Float!
+    $user_id: ID!
+  ) {
+    insertPlace(
+      title: $title
+      description: $description
+      photo: $photo
+      latitude: $latitude
+      longitude: $longitude
+      points: $points
+      user_id: $user_id
+    ) {
+      id
+      title
+      description
+      photo
+      latitude
+      longitude
     }
   }
 `;
