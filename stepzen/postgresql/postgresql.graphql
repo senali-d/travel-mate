@@ -394,7 +394,6 @@ type Mutation {
       configuration: "postgresql_config"
     )
   insertPlace(
-    created_at: DateTime!
     description: String!
     points: Float!
     latitude: Float!
@@ -410,7 +409,7 @@ type Mutation {
       dml: INSERT
       configuration: "postgresql_config"
     )
-  updatePlace(
+  updatePlacePoint(
     id: ID!,
     points: Float!
   ): Place
@@ -418,6 +417,21 @@ type Mutation {
       type: "postgresql"
       query: """
       update "place" SET "points" = $2 WHERE "id" = $1 RETURNING *
+      """
+      configuration: "postgresql_config"
+    )
+  updatePlace(
+    id: ID!,
+    title: String!
+    description: String!
+    photo: String!
+    latitude: Float!
+    longitude: Float!
+  ): Place
+    @dbquery(
+      type: "postgresql"
+      query: """
+      update "place" SET "title" = $2, "description" = $3, "photo" = $4, "latitude" = $5, "longitude" = $6 WHERE "id" = $1 RETURNING *
       """
       configuration: "postgresql_config"
     )
