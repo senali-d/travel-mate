@@ -1,7 +1,29 @@
 const About = () => {
   return (
-    <div>
-      About
+    <div className="py-16 bg-white">
+      <div className="container m-auto px-6 text-gray-600 md:px-12 xl:px-6">
+        <div className="space-y-6 md:space-y-0 md:flex md:gap-6 lg:items-center lg:gap-12">
+          <div className="md:5/12 lg:w-5/12">
+            <img
+              src="https://res.cloudinary.com/zencloude/image/upload/v1657777019/travel-mate/traveller_l5ptgk.jpg"
+              alt="image"
+              loading="lazy"
+              className="rounded-2xl"
+            />
+          </div>
+          <div className="md:7/12 lg:w-6/12">
+            <h2 className="text-2xl text-gray-900 font-bold md:text-4xl">
+              Travel Mate is community of travellers. 
+            </h2>
+            <p className="mt-6 text-gray-600">
+              Our projects focus on building web applications for travel community, to build a  community for travellers, travell enthusiasts and show the beautiy of the world.
+            </p>
+            <p className="mt-4 text-gray-600">
+              Basically site interprets the travelling destination. Any community member can create travel destination they visited with some photographs. So other community members can get some idea about next travel destination also share the experience with others.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

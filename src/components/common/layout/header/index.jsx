@@ -72,7 +72,7 @@ const Header = () => {
     <nav className="fixed z-10 w-full mx-auto bg-indigo-50 border-gray-200 px-2 sm:px-4 py-2.5 rounded shadow">
       <div className="max-w-[1080px] container flex flex-wrap justify-between items-center mx-auto">
         <Link to={RouteRegistry.home.path} className="flex items-center flex-1">
-          <span className="self-center text-xl font-medium whitespace-nowrap text-[#6d86a8]">
+          <span className="self-center text-xl font-bold whitespace-nowrap text-[#45576f]">
             {RouteRegistry.home.title}
           </span>
         </Link>

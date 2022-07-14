@@ -8,19 +8,25 @@ const Footer = () => {
     <footer className=" w-full p-4 sm:p-6 sm:px-4 bg-[#45576f] text-[#bac0cb]">
       <div className="mx-auto max-w-[1080px]">
         <div className="sm:flex sm:items-center sm:justify-between">
-          <Link to={RouteRegistry.home.path} className="flex items-center mb-4 sm:mb-0">
+          <Link to={RouteRegistry.home.path} className="flex items-center mb-4 sm:mb-0 hover:text-[#bac0cb]">
             <span className="self-center text-2xl font-semibold whitespace-nowrap">
               {RouteRegistry.home.title}
             </span>
           </Link>
           <ul className="flex flex-wrap items-center mb-6 text-sm sm:mb-0">
             <li>
-              <Link to={RouteRegistry.about.path} className="mr-4 hover:underline md:mr-6">
+              <Link 
+                to={RouteRegistry.about.path} 
+                className="mr-4 hover:underline md:mr-6 hover:text-[#bac0cb]"
+              >
                 {RouteRegistry.about.title}
               </Link>
             </li>
             <li>
-              <Link to={RouteRegistry.contact.path} className="hover:underline">
+              <Link 
+                to={RouteRegistry.contact.path} 
+                className="hover:underline hover:text-[#bac0cb]"
+              >
                 {RouteRegistry.contact.title}
               </Link>
             </li>
