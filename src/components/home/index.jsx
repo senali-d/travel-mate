@@ -1,7 +1,112 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
+
+import client from '../../apallo-client'
+import AuthContainer from '../../containers/auth'
+import RouteRegistry from '../../routes/RouteRegistry'
+import { GET_PLACES, GET_USERS } from '../../graphql/queries'
+import ImageCard from '../common/card/image-card'
+import Loader from '../common/loader'
+import NoData from '../common/no-data'
+import FlatCard from '../common/card/flat-card'
+
 const Home = () => {
+  const { isAuthenticated, getUserInfo } = AuthContainer.useContainer()
+  const navigate = useNavigate()
+
+  const [userId, setUserId] = useState(null)
+  const [users, setUsers] = useState()
+  const [userLoading, setUserLoading] = useState(true)
+  const [userError, setUserError] = useState(null)
+
+  const { loading, error, data } = useQuery(GET_PLACES);
+
+  const places = data && data.getPlaceList
+
+  const handleRedirect = (id) => {
+    navigate(`${RouteRegistry.places.path}/${id}`)
+  }
+
+
+  useEffect(() => {
+    getUsers()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId])
+
+  useEffect(() => {
+    const user = getUserInfo()
+    if (user !== undefined) {
+      setUserId(user.id)
+    }
+  }, [getUserInfo])
+
+  const getUsers = async () => {
+    const {
+      data: { getUserExceptMe },
+      loading,
+      errors,
+    } = await client.query({
+      query: GET_USERS,
+      variables: {
+        id: userId,
+      },
+    })
+    setUsers(getUserExceptMe)
+    setUserLoading(loading)
+    errors && setUserError(errors)
+  }
+
+  const starPoints = ({ points, reviewList }) => {
+    if(reviewList.length > 0) {
+      return points/reviewList.length
+    }else {
+      return points
+    }
+  }
+
+  const handleFollow = () => {
+    console.log('Clicking')
+  }
+
   return (
-    <div>
-      Home
+    <div className="flex">
+      <div className="sm:w-2/3 w-full">
+        <div className={`flex flex-row flex-wrap gap-y-7 gap-x-3 justify-start ${loading || error ? 'lg:justify-center' : 'lg:justify-start'} lg:gap-x-7`}>
+          {
+            loading ? <Loader loading={loading} /> :
+            !error && places ? places.map(place => 
+              <ImageCard 
+                key={place.id}
+                image={place.photo}
+                title={place.title} 
+                description={place.description}
+                stars={starPoints(place)}
+                onClick={() => handleRedirect(place.id)}
+                stylecss="md:w-[calc(50%-1rem)] w-full"
+              />
+            ) : <NoData message='Not found any place' />
+          }
+        </div>
+      </div>
+      <div className="sm:w-1/3 w-full">
+        <div className={`flex flex-col flex-wrap gap-y-7 gap-x-3 ${userLoading || userError ? 'lg:justify-center items-center' : 'items-end lg:justify-end'} lg:gap-x-7`}>
+          {
+            userLoading ? <Loader loading={userLoading} /> :
+            !userError && 
+            users ? users.map(user => 
+              <FlatCard 
+                key={user.id}
+                image={user.image}
+                title={user.name}
+                stylecss="w-[90%]"
+                btnTitle="Follow"
+                btnClick={handleFollow}
+              />
+            ) : <NoData message='Not found any place' />
+          }
+        </div>
+      </div>
     </div>
   )
 }

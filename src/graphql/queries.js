@@ -134,3 +134,13 @@ export const GET_HOTEL = gql`
     }
   }
 `;
+
+export const GET_USERS = gql`
+  query MyQuery($id: ID!) {
+    getUserExceptMe(id: $id) {
+      id
+      name
+      image
+    }
+  }
+`;
