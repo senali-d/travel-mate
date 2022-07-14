@@ -219,3 +219,19 @@ export const UPDATE_HOTEL_POINT = gql`
     }
   }
 `;
+
+export const UNFOLLOW = gql`
+  mutation MyMutation (
+    $id: ID!,
+  ) {
+    deleteUser_follow(
+      id: $id,
+    ) {
+      id
+      userUsingFollower_id {
+        id
+        name
+      }
+    }
+  }
+`;

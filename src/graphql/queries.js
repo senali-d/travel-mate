@@ -61,6 +61,16 @@ export const GET_USER_BY_ID = gql`
       image
       mobile
       country
+      user_followListUsingUser_id {
+        userUsingFollower_id {
+          id
+        }
+      }
+      user_followListUsingFollower_id {
+        userUsingUser_id {
+          id
+        }
+      }
     }
   }
 `;
@@ -141,6 +151,32 @@ export const GET_USERS = gql`
       id
       name
       image
+    }
+  }
+`;
+
+export const GET_FOLLOWERS = gql`
+  query MyQuery($id: ID!) {
+    getUser_followUsingFollower_id(id: $id) {
+      id
+      userUsingUser_id {
+        id
+        name
+        image
+      }
+    }
+  }
+`;
+
+export const GET_FOLLOWING = gql`
+  query MyQuery($id: ID!) {
+    getUser_followUsingUser_id(id: $id) {
+      id
+      userUsingFollower_id {
+        name
+        id
+        image
+      }
     }
   }
 `;
