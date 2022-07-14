@@ -1,3 +1,10 @@
+type Contacts {
+  created_at: DateTime
+  email: String
+  id: ID!
+  message: String
+}
+
 type Guide {
   created_at: DateTime
   email: String
@@ -128,12 +135,47 @@ type User {
   placeList: [Place] @materializer(query: "getPlaceUsingUser_id")
   reviewList: [Review] @materializer(query: "getReviewUsingUser_id")
   role: String
+  user_followListUsingFollower_id: [User_follow]
+    @materializer(query: "getUser_followUsingFollower_id")
+  user_followListUsingUser_id: [User_follow]
+    @materializer(query: "getUser_followUsingUser_id")
+}
+
+type User_follow {
+  created_at: DateTime
+  follower_id: ID
+  id: ID!
+  userUsingFollower_id: User
+    @materializer(
+      query: "getUser"
+      arguments: [{ name: "id", field: "follower_id" }]
+    )
+  userUsingUser_id: User
+    @materializer(
+      query: "getUser"
+      arguments: [{ name: "id", field: "user_id" }]
+    )
+  user_id: ID
 }
 
 """
 These are some examples of queries generated from the schema. Feel free to modify them or add your own.
 """
 type Query {
+  getContactsList: [Contacts]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "contacts"
+      configuration: "postgresql_config"
+    )
+  getContacts(id: ID!): Contacts
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "contacts"
+      configuration: "postgresql_config"
+    )
   getGuideList: [Guide]
     @dbquery(
       type: "postgresql"
@@ -350,12 +392,66 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+  getUser_followUsingFollower_id(id: ID!): [User_follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."follower_id", T."id", T."user_id"
+        FROM "public"."user_follow" T
+        WHERE T."follower_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getUser_followUsingUser_id(id: ID!): [User_follow]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      SELECT T."created_at", T."follower_id", T."id", T."user_id"
+        FROM "public"."user_follow" T
+        WHERE T."user_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  getUser_followList: [User_follow]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "user_follow"
+      configuration: "postgresql_config"
+    )
+  getUser_follow(id: ID!): User_follow
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "user_follow"
+      configuration: "postgresql_config"
+    )
 }
 
 """
 These are some examples of mutations generated from the schema. Feel free to modify them or add your own.
 """
 type Mutation {
+  insertContacts(
+    created_at: DateTime!
+    email: String!
+    message: String!
+  ): Contacts
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "contacts"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteContacts(id: ID!): Contacts
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "contacts"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
   insertGuide(
     image: String!
     created_at: DateTime!
@@ -574,6 +670,26 @@ type Mutation {
       type: "postgresql"
       schema: "public"
       table: "user"
+      dml: DELETE
+      configuration: "postgresql_config"
+    )
+  insertUser_follow(
+    created_at: DateTime!
+    user_id: ID!
+    follower_id: ID!
+  ): User_follow
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "user_follow"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+  deleteUser_follow(id: ID!): User_follow
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "user_follow"
       dml: DELETE
       configuration: "postgresql_config"
     )
