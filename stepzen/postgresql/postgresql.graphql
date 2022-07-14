@@ -297,6 +297,14 @@ type Query {
       table: "user"
       configuration: "postgresql_config"
     )
+  getUserExceptMe(id: ID!): [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "user" where "id" != $1 and "role" = 'traveller'
+      """
+      configuration: "postgresql_config"
+    )
   getUser(id: ID!): User
     @dbquery(
       type: "postgresql"
