@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { Form } from 'antd'
 
@@ -8,13 +9,17 @@ import client from '../../apallo-client'
 import { GET_USER_BY_ID } from '../../graphql/queries'
 import { UPDATE_USER } from '../../graphql/mutation'
 import FormInput from '../common/form-element/input-emement'
+import RouteRegistry from '../../routes/RouteRegistry'
 
 const Profile = () => {
   const { getUserInfo } = AuthContainer.useContainer()
   const [form] = Form.useForm()
+  const navigate = useNavigate()
   const { id, image: userImage, name: username } = getUserInfo()
   
   const [profileImage, setProfileImage] = useState('')
+  const [followers, setFollowers] = useState(0)
+  const [following, setFollowing] = useState(0)
   
   const [updateUser, { loading, /* error */ }] = useMutation(UPDATE_USER)
 
@@ -94,6 +99,8 @@ const Profile = () => {
       country: profile.country,
     })
     setProfileImage(profile.image)
+    setFollowers(profile.user_followListUsingFollower_id.length)
+    setFollowing(profile.user_followListUsingUser_id.length)
   }
 
   return (
@@ -120,6 +127,16 @@ const Profile = () => {
                 accept="image/png, image/jpeg"
                 onChange={handleImageUpload}
               />
+              <div className="flex">
+                <span className="flex flex-col items-center gap-1 text-sm text-gray-500 text-center px-4 pb-5">
+                  <div onClick={() => navigate(RouteRegistry.follow.path)}>{followers}</div>
+                  <div onClick={() => navigate(RouteRegistry.follow.path)}>Followers</div>
+                </span>
+                <span className="flex flex-col items-center gap-1 text-sm text-gray-500 text-center px-4 pb-5">
+                  <div onClick={() => navigate(RouteRegistry.follow.path)}>{following}</div>
+                  <div onClick={() => navigate(RouteRegistry.follow.path)}>Following</div>
+                </span>
+              </div>
             </div>
             <div className="w-[calc(50%-8px)]">
               <FormInput

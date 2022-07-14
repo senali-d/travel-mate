@@ -31,6 +31,10 @@ const RouteRegistry = {
     path: '/profile',
     title: 'My Profile',
   },
+  follow: {
+    path: '/follow',
+    title: 'Follow',
+  },
   hotels: {
     path: '/hotel',
     title: 'Hotel',
