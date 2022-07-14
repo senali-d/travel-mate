@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types'
 import { GoLocation } from 'react-icons/go'
+
+import Button from '../button'
 import Thumbnail from '../../../assets/images/thumbnail.png'
 
-const ProfileCard = ({ image, name, location, email, mobile, stylecss }) => {
+const ProfileCard = ({ image, name, location, email, mobile, stylecss, btnTitle, btnClick }) => {
   return (
     <div className={`${stylecss} bg-white rounded-lg border border-gray-200 shadow-md pt-7`}>
       <div className="flex flex-col items-center pb-10">
@@ -31,6 +33,14 @@ const ProfileCard = ({ image, name, location, email, mobile, stylecss }) => {
           }
           </div>
         }
+        {btnTitle &&
+          <Button
+            title={btnTitle}
+            size="sm"
+            stylecss="align-self"
+            onClick={btnClick}
+          />
+        }
       </div>
     </div>
   )
@@ -43,6 +53,8 @@ ProfileCard.propTypes = {
   email: PropTypes.string,
   mobile: PropTypes.string,
   stylecss: PropTypes.string,
+  btnTitle: PropTypes.string,
+  btnClick: PropTypes.func,
 }
 
 ProfileCard.defaultProps = {
@@ -51,6 +63,7 @@ ProfileCard.defaultProps = {
   email: '',
   mobile: '',
   stylecss: 'lg:w-[calc(33%-1rem)] w-[100%] sm:w-[calc(50%-0.5rem)]',
+  btnTitle: '',
 }
 
 export default ProfileCard
