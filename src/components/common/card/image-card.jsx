@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import { AiFillStar } from 'react-icons/ai'
 
-const ImageCard = ({ image, title, description, stars, onClick }) => {
+const ImageCard = ({ image, title, description, stars, onClick, stylecss }) => {
   return (
-    <div className="lg:w-[calc(33%-1rem)] sm:w-[calc(50%-0.5rem)] cursor-pointer" onClick={onClick}>
+    <div className={`cursor-pointer ${stylecss}`} onClick={onClick}>
       <div className="bg-white rounded-lg border border-gray-200 shadow-md">
         <img
           className="rounded-t-lg w-full object-fit"
@@ -36,8 +36,10 @@ ImageCard.propTypes = {
   description: PropTypes.string.isRequired,
   stars: PropTypes.number,
   onClick: PropTypes.func,
+  stylecss: PropTypes.string,
 }
 
 ImageCard.defaultProps = {
   stars: 0,
+  stylecss: 'lg:w-[calc(33%-1rem)] sm:w-[calc(50%-0.5rem)]'
 }

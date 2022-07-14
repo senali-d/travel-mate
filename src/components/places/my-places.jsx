@@ -196,7 +196,7 @@ const MyPlaces = () => {
         {
           <div className="pb-4 flex justify-end">
             <Button
-              title="Create Travel"
+              title="Create Trip"
               size="sm"
               onClick={handleInitialCreate}
             />
@@ -274,7 +274,7 @@ const MyPlaces = () => {
           </div>
           <div className="w-full flex justify-center">
             <Button
-              title={isEdit ? "Update Travel" : "Create Travel"}
+              title={isEdit ? "Update Trip" : "Create Trip"}
               loading={loading || createLoading}
             />
           </div>

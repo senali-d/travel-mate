@@ -5,11 +5,11 @@ const RouteRegistry = {
   },
   places: {
     path: '/place',
-    title: 'Places',
+    title: 'Destinations',
   },
   myPlaces: {
-    path: '/my-place',
-    title: 'My places',
+    path: '/my-trip',
+    title: 'My Trips',
   },
   placeDetail: {
     path: '/place/:id',
