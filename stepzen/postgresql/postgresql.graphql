@@ -434,6 +434,14 @@ type Query {
       table: "user_follow"
       configuration: "postgresql_config"
     )
+  getUnFollowUsers(id: ID!): [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "user" u where u.id not in (select f.follower_id from "user_follow" f where f.user_id = $1) and u.role = 'traveller' and u.id != $1 limit 5
+      """
+      configuration: "postgresql_config"
+    )
 }
 
 """
