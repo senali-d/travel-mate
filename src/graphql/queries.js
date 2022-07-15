@@ -221,3 +221,27 @@ export const GET_UNFOLLOW_USER = gql`
     }
   }
 `;
+
+export const GET_USER_EXCEPT_ME = gql`
+  query MyQuery($id: ID!) {
+    getUserExceptMe(id: $id) {
+      id
+      name
+      email
+      image
+      country
+    }
+  }
+`;
+
+export const GET_ALL_USERS = gql`
+  query MyQuery {
+    getAllTravellers {
+      id
+      name
+      email
+      image
+      country
+    }
+  }
+`;
