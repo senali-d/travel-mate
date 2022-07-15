@@ -98,7 +98,7 @@ const FollowerFollowing = () => {
                 {loading ? (
                   <Loader loading={loading} />
                 ) : !errors && followers && followers.length > 0 ? (
-                  followers.map(({ userUsingFollower_id: follower }) => (
+                  followers.map(({ userUsingUser_id: follower }) => (
                     <ProfileCard
                       key={follower.id}
                       image={follower.image}
