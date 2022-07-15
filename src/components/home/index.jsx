@@ -28,7 +28,10 @@ const Home = () => {
   const handleRedirect = (id) => {
     navigate(`${RouteRegistry.places.path}/${id}`)
   }
-
+  
+  const handleViewTraveller = (id) => {
+    navigate(`${RouteRegistry.traveller.path}/${id}`)
+  }
 
   useEffect(() => {
     getUsers()
@@ -121,6 +124,7 @@ const Home = () => {
                   title={user.name}
                   stylecss="w-[90%]"
                   btnTitle="Follow"
+                  onClick={()=>handleViewTraveller(user.id)}
                   btnClick={handleFollow}
                 />
               ) : <NoData message='Not found any place' />
@@ -137,6 +141,7 @@ const Home = () => {
                   title={user.name}
                   stylecss="w-[90%]"
                   btnTitle="Follow"
+                  onClick={()=>handleViewTraveller(user.id)}
                   btnClick={notify}
                 />
               ) : <NoData message='Not found any place' />

@@ -39,6 +39,10 @@ const RouteRegistry = {
     path: '/traveller',
     title: 'Traveller',
   },
+  travellerDetail: {
+    path: '/traveller/:id',
+    title: 'Traveller Detail',
+  },
   hotels: {
     path: '/hotel',
     title: 'Hotel',

@@ -35,6 +35,7 @@ const AllRoutes = () => {
         <Route path={RouteRegistry.hotels.path}element={<Hotel />} />
         <Route path={RouteRegistry.hotelDetail.path} element={<HotelDetail />} />
         <Route path={RouteRegistry.traveller.path} element={<Traveller />} />
+        <Route path={RouteRegistry.travellerDetail.path} element={<Traveller />} />
         <Route 
           path={RouteRegistry.profile.path} 
           element={

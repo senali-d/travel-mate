@@ -4,9 +4,9 @@ import { GoLocation } from 'react-icons/go'
 import Button from '../button'
 import Thumbnail from '../../../assets/images/thumbnail.png'
 
-const ProfileCard = ({ image, name, location, email, mobile, stylecss, btnTitle, btnClick }) => {
+const ProfileCard = ({ image, name, location, email, mobile, onClick, stylecss, btnTitle, btnClick }) => {
   return (
-    <div className={`${stylecss} bg-white rounded-lg border border-gray-200 shadow-md pt-7`}>
+    <div onClick={onClick} className={`${stylecss} bg-white rounded-lg border border-gray-200 shadow-md pt-7 ${onClick && 'hover:cursor-pointer'}`}>
       <div className="flex flex-col items-center pb-10">
         <img
           className="mb-3 w-24 h-24 rounded-full shadow-lg object-cover"
@@ -55,6 +55,7 @@ ProfileCard.propTypes = {
   stylecss: PropTypes.string,
   btnTitle: PropTypes.string,
   btnClick: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 ProfileCard.defaultProps = {

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { Tabs } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 import AuthContainer from '../../containers/auth'
 import client from '../../apallo-client'
+import RouteRegistry from '../../routes/RouteRegistry'
 import { GET_FOLLOWERS, GET_FOLLOWING } from '../../graphql/queries'
 import { UNFOLLOW } from '../../graphql/mutation'
 import ProfileCard from '../common/card/profile-card'
@@ -12,6 +14,7 @@ import NoData from '../common/no-data'
 
 const FollowerFollowing = () => {
   const { getUserInfo } = AuthContainer.useContainer()
+  const navigate = useNavigate()
   const { id } = getUserInfo()
   
   const [followers, setFollowers] = useState(0)
@@ -88,6 +91,10 @@ const FollowerFollowing = () => {
     }
   }
 
+  const handleRedirect = (id) => {
+    navigate(`${RouteRegistry.traveller.path}/${id}`)
+  }
+
   return (
     <div className="md:w-[75%] w-[100%] m-auto bg-white rounded-lg border border-gray-200 shadow-md pt-7 pb-10">
       <div className="flex flex-col items-center">
@@ -103,6 +110,7 @@ const FollowerFollowing = () => {
                       key={follower.id}
                       image={follower.image}
                       name={follower.name}
+                      onClick={()=>handleRedirect(follower.id)}
                     />
                   ))
                 ) : (
@@ -122,6 +130,7 @@ const FollowerFollowing = () => {
                       name={following.name}
                       btnTitle="Unfollow"
                       btnClick={() => handleUnFollow(id)}
+                      onClick={()=>handleRedirect(following.id)}
                     />
                   ))
                 ) : (

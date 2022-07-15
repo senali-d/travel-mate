@@ -128,11 +128,11 @@ const Profile = () => {
                 onChange={handleImageUpload}
               />
               <div className="flex">
-                <span className="flex flex-col items-center gap-1 text-sm text-gray-500 text-center px-4 pb-5">
+                <span className="flex flex-col items-center gap-1 text-sm text-gray-500 text-center px-4 pb-5 hover:cursor-pointer">
                   <div onClick={() => navigate(RouteRegistry.follow.path)}>{followers}</div>
                   <div onClick={() => navigate(RouteRegistry.follow.path)}>Followers</div>
                 </span>
-                <span className="flex flex-col items-center gap-1 text-sm text-gray-500 text-center px-4 pb-5">
+                <span className="flex flex-col items-center gap-1 text-sm text-gray-500 text-center px-4 pb-5 hover:cursor-pointer">
                   <div onClick={() => navigate(RouteRegistry.follow.path)}>{following}</div>
                   <div onClick={() => navigate(RouteRegistry.follow.path)}>Following</div>
                 </span>

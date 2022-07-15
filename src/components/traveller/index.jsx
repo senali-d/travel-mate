@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import client from '../../apallo-client'
 import { GET_TRAVELLER } from '../../graphql/queries'
@@ -10,12 +10,15 @@ import NoData from '../common/no-data'
 import Thumbnail from '../../assets/images/thumbnail.png'
 
 const Traveller = () => {
+  const { pathname } = useLocation()
   const navigate = useNavigate()
 
   const [profile, setProfile] = useState('')
   const [followers, setFollowers] = useState(0)
   const [following, setFollowing] = useState(0)
   const [loading, setLoading] = useState(true)
+
+  const id = pathname.split("/")[2]
 
   useEffect(() => {
     getProfile()
@@ -29,7 +32,7 @@ const Traveller = () => {
     } = await client.query({
       query: GET_TRAVELLER,
       variables: {
-        id: 6,
+        id: id,
       },
     })
     successHandler(getUser, loading)
