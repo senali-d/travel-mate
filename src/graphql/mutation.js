@@ -251,3 +251,15 @@ export const CREATE_CONTACT = gql`
     }
   }
 `;
+
+export const FOLLOW = gql`
+  mutation MyMutation(
+    $follower_id: ID!,
+    $user_id: ID!,
+  ) {
+    insertUser_follow(follower_id: $follower_id, user_id: $user_id) {
+      follower_id
+      id
+    }
+  }
+`;

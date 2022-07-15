@@ -58,56 +58,62 @@ const Traveller = () => {
   return (
     <>
       {isAuthenticated() ? (
-        loadingUser ? (
-          <Loader loading={loadingUser} />
-        ) : (
-          <div
-            className={`flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center ${
-              loading || errors ? "lg:justify-center" : "lg:justify-start"
-            } lg:gap-x-7`}
-          >
-            {!errors && travellers ? (
-              travellers.map((traveller) => (
-                <ProfileCard
-                  key={traveller.id}
-                  image={traveller.image}
-                  name={traveller.name}
-                  location={traveller.country}
-                  email={traveller.email}
-                  onClick={()=>handleRedirect(traveller.id)}
-                />
-              ))
-            ) : (
-              <NoData message="Not found any guide" />
-            )}
-          </div>
-        )
-      ) : loadingUser ? (
-        <Loader loading={loadingUser} />
+        <div
+          className={`flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center ${
+            loading || errors ? "lg:justify-center" : "lg:justify-start"
+          } lg:gap-x-7`}
+        >
+          {loading ? (
+            <Loader loading={loadingUser} />
+          ) : (
+            <>
+              {!errors && travellers ? (
+                travellers.map((traveller) => (
+                  <ProfileCard
+                    key={traveller.id}
+                    image={traveller.image}
+                    name={traveller.name}
+                    location={traveller.country}
+                    email={traveller.email}
+                    onClick={() => handleRedirect(traveller.id)}
+                  />
+                ))
+              ) : (
+                <NoData message="Not found any guide" />
+              )}
+            </>
+          )}
+        </div>
       ) : (
         <div
           className={`flex flex-row flex-wrap gap-y-7 gap-x-3 justify-center ${
             loadingUser || errorsUser ? "lg:justify-center" : "lg:justify-start"
           } lg:gap-x-7`}
         >
-          {!errorsUser && allTravellers ? (
-            allTravellers.map((traveller) => (
-              <ProfileCard
-                key={traveller.id}
-                image={traveller.image}
-                name={traveller.name}
-                location={traveller.country}
-                email={traveller.email}
-                onClick={()=>handleRedirect(traveller.id)}
-              />
-            ))
+          {loadingUser ? (
+            <Loader loading={loadingUser} />
           ) : (
-            <NoData message="Not found any guide" />
+            <>
+              {!errorsUser && allTravellers ? (
+                allTravellers.map((traveller) => (
+                  <ProfileCard
+                    key={traveller.id}
+                    image={traveller.image}
+                    name={traveller.name}
+                    location={traveller.country}
+                    email={traveller.email}
+                    onClick={() => handleRedirect(traveller.id)}
+                  />
+                ))
+              ) : (
+                <NoData message="Not found any guide" />
+              )}
+            </>
           )}
         </div>
       )}
     </>
   );
-};
+}
 
 export default Traveller

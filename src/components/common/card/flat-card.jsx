@@ -4,7 +4,7 @@ import Button from '../button'
 
 const FlatCard = ({ image, title, subtitle, onClick, stylecss, btnTitle, btnClick }) => {
   return (
-    <div onClick={onClick} className={`flex bg-white items-center space-x-4 py-3 sm:py-2 ${onClick && 'hover:cursor-pointer'} rounded-lg px-5 ${stylecss}`}>
+    <div className={`flex bg-white items-center space-x-4 py-3 sm:py-2 rounded-lg px-5 ${stylecss}`}>
       <div className="flex-shrink-0">
         <img
           className="w-12 h-12 rounded-full"
@@ -13,7 +13,7 @@ const FlatCard = ({ image, title, subtitle, onClick, stylecss, btnTitle, btnClic
         />
       </div>
       <div className={`flex-1 min-w-0 ${btnTitle ? 'flex-row flex items-center justify-between' : 'flex-col' }`}>
-        <p className="text-sm font-medium text-gray-900 truncate text-left">
+        <p onClick={onClick} className={`text-sm font-medium text-gray-900 truncate text-left ${onClick && 'hover:cursor-pointer'}`}>
           {title}
         </p>
         {subtitle && <p className="text-sm text-gray-500 truncate text-left">

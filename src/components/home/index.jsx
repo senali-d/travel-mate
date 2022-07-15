@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
 
 import client from '../../apallo-client'
 import AuthContainer from '../../containers/auth'
 import RouteRegistry from '../../routes/RouteRegistry'
 import { GET_PLACES, GET_USERS, GET_UNFOLLOW_USER } from '../../graphql/queries'
+import { FOLLOW } from '../../graphql/mutation'
 import ImageCard from '../common/card/image-card'
 import Loader from '../common/loader'
 import NoData from '../common/no-data'
@@ -85,8 +87,25 @@ const Home = () => {
     }
   }
 
-  const handleFollow = () => {
-    // toast.success("Follow")
+  const [insertUser_follow] = useMutation(FOLLOW)
+
+  const handleFollow = async(followId) => {
+    try {
+      const {
+        data: { insertUser_follow: follow },
+      } = await insertUser_follow({
+        variables: {
+          follower_id: followId,
+          user_id: userId,
+        },
+      })
+      if(follow) {
+        const followings = users.filter(u => u.id !== follow.follower_id)
+        setUsers(followings)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const notify = () => toast.warn("Please sign in follow travellers")
@@ -125,7 +144,7 @@ const Home = () => {
                   stylecss="w-[90%]"
                   btnTitle="Follow"
                   onClick={()=>handleViewTraveller(user.id)}
-                  btnClick={handleFollow}
+                  btnClick={()=>handleFollow(user.id)}
                 />
               ) : <NoData message='Not found any place' />
             }

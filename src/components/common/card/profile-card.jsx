@@ -8,7 +8,7 @@ const ProfileCard = ({ image, name, location, email, mobile, onClick, stylecss, 
   return (
     <div className={`${stylecss} bg-white rounded-lg border border-gray-200 shadow-md pt-7`}>
       <div className="flex flex-col items-center pb-10">
-        <div onClick={onClick} className={`${onClick && 'hover:cursor-pointer'}`}>
+        <div onClick={onClick} className={`flex flex-col justify-center items-center ${onClick ? 'hover:cursor-pointer' : ''}`}>
           <img
             className="mb-3 w-24 h-24 rounded-full shadow-lg object-cover"
             src={image === '' ? Thumbnail : image}
