@@ -697,7 +697,6 @@ type Mutation {
       configuration: "postgresql_config"
     )
   insertUser_follow(
-    created_at: DateTime!
     user_id: ID!
     follower_id: ID!
   ): User_follow
