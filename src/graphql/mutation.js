@@ -235,3 +235,19 @@ export const UNFOLLOW = gql`
     }
   }
 `;
+
+export const CREATE_CONTACT = gql`
+  mutation MyMutation (
+    $email: String!
+    $message: String!
+  ) {
+    insertContacts(
+      email: $email
+      message: $message
+    ) {
+      id
+      email
+      message
+    }
+  }
+`;

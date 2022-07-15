@@ -1,5 +1,8 @@
 import { Form } from 'antd'
+import { useMutation } from '@apollo/client'
+import { toast } from 'react-toastify'
 
+import { CREATE_CONTACT } from '../../graphql/mutation'
 import Button from '../common/button'
 import FormInput from '../common/form-element/input-emement'
 
@@ -17,23 +20,26 @@ const Contact = () => {
       })
   }
 
-  const contactSubmit = (contact) => {
-    // try {
-    //   const {
-    //     data: { updateUser: updatedUser },
-    //   } = await updateUser({
-    //     variables: {
-    //       email: contact.email,
-    //       message: contact.message,
-    //     },
-    //   })
-    //   successHandler(updatedUser)
-    // } catch (error) {
-    //   console.error(error)
-    // }
-  }
+  const [insertContacts, { loading, error }] = useMutation(CREATE_CONTACT)
 
+  const contactSubmit = async(contact) => {
+    try {
+      const {
+        data: { insertContacts: newContact }
+      } = await insertContacts({
+        variables: {
+          email: contact.email,
+          message: contact.message,
+        },
+      })
+      successHandler()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
   const successHandler = () => {
+    toast.success('Successfully submitted!')
     form.resetFields()
   }
 
@@ -106,7 +112,7 @@ const Contact = () => {
               <Button
                 title="Submit"
                 stylecss="w-full justify-center"
-                // loading={loading}
+                loading={loading}
               />
             </div>
           </Form>
