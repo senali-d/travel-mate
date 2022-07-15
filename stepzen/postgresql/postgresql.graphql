@@ -449,7 +449,6 @@ These are some examples of mutations generated from the schema. Feel free to mod
 """
 type Mutation {
   insertContacts(
-    created_at: DateTime!
     email: String!
     message: String!
   ): Contacts
