@@ -20,6 +20,7 @@ import Hotel from '../components/hotel'
 import HotelDetail from '../components/hotel/hotel-detail'
 import MyPlaces from '../components/places/my-places'
 import FollowerFollowing from '../components/profile/follower-following'
+import Traveller from '../components/traveller'
 
 const AllRoutes = () => {
   return (
@@ -33,6 +34,7 @@ const AllRoutes = () => {
         <Route path={RouteRegistry.contact.path} element={<Contact />} />
         <Route path={RouteRegistry.hotels.path}element={<Hotel />} />
         <Route path={RouteRegistry.hotelDetail.path} element={<HotelDetail />} />
+        <Route path={RouteRegistry.traveller.path} element={<Traveller />} />
         <Route 
           path={RouteRegistry.profile.path} 
           element={
