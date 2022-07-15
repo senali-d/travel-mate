@@ -146,8 +146,8 @@ export const GET_HOTEL = gql`
 `;
 
 export const GET_USERS = gql`
-  query MyQuery($id: ID!) {
-    getUserExceptMe(id: $id) {
+  query MyQuery {
+    getTravellers {
       id
       name
       image
@@ -177,6 +177,47 @@ export const GET_FOLLOWING = gql`
         id
         image
       }
+    }
+  }
+`;
+
+export const GET_TRAVELLER = gql`
+  query MyQuery($id: ID!) {
+    getUser(id: $id) {
+      id
+      name
+      image
+      placeList {
+        id
+        photo
+        title
+        description
+        points
+        reviewList {
+          id
+        }
+      }
+      user_followListUsingUser_id {
+        userUsingFollower_id {
+          name
+        }
+      }
+      user_followListUsingFollower_id {
+        userUsingUser_id {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const GET_UNFOLLOW_USER = gql`
+  query MyQuery($id: ID!) {
+    getUnFollowUsers(id: $id) {
+      id
+      name
+      image
     }
   }
 `;

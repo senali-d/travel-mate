@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
+import { toast } from 'react-toastify'
 
 import client from '../../apallo-client'
 import AuthContainer from '../../containers/auth'
 import RouteRegistry from '../../routes/RouteRegistry'
-import { GET_PLACES, GET_USERS } from '../../graphql/queries'
+import { GET_PLACES, GET_USERS, GET_UNFOLLOW_USER } from '../../graphql/queries'
 import ImageCard from '../common/card/image-card'
 import Loader from '../common/loader'
 import NoData from '../common/no-data'
@@ -38,21 +39,37 @@ const Home = () => {
     const user = getUserInfo()
     if (user !== undefined) {
       setUserId(user.id)
+      if(isAuthenticated()) {
+        getUnFollowUsers(user.id)
+      }
     }
   }, [getUserInfo])
 
   const getUsers = async () => {
     const {
-      data: { getUserExceptMe },
+      data: { getTravellers },
       loading,
       errors,
     } = await client.query({
-      query: GET_USERS,
+      query: GET_USERS
+    })
+    setUsers(getTravellers)
+    setUserLoading(loading)
+    errors && setUserError(errors)
+  }
+
+  const getUnFollowUsers = async(userId) => {
+    const {
+      data: { getUnFollowUsers },
+      loading,
+      errors,
+    } = await client.query({
+      query: GET_UNFOLLOW_USER,
       variables: {
         id: userId,
       },
     })
-    setUsers(getUserExceptMe)
+    setUsers(getUnFollowUsers)
     setUserLoading(loading)
     errors && setUserError(errors)
   }
@@ -66,8 +83,10 @@ const Home = () => {
   }
 
   const handleFollow = () => {
-    console.log('Clicking')
+    // toast.success("Follow")
   }
+
+  const notify = () => toast.warn("Please sign in follow travellers")
 
   return (
     <div className="flex">
@@ -90,22 +109,40 @@ const Home = () => {
         </div>
       </div>
       <div className="sm:w-1/3 w-full">
-        <div className={`flex flex-col flex-wrap gap-y-7 gap-x-3 ${userLoading || userError ? 'lg:justify-center items-center' : 'items-end lg:justify-end'} lg:gap-x-7`}>
-          {
-            userLoading ? <Loader loading={userLoading} /> :
-            !userError && 
-            users ? users.map(user => 
-              <FlatCard 
-                key={user.id}
-                image={user.image}
-                title={user.name}
-                stylecss="w-[90%]"
-                btnTitle="Follow"
-                btnClick={handleFollow}
-              />
-            ) : <NoData message='Not found any place' />
-          }
-        </div>
+        {isAuthenticated() ?
+          <div className={`flex flex-col flex-wrap gap-y-7 gap-x-3 ${userLoading || userError ? 'lg:justify-center items-center' : 'items-end lg:justify-end'} lg:gap-x-7`}>
+            {
+              userLoading ? <Loader loading={userLoading} /> :
+              !userError && 
+              users ? users.map(user => 
+                <FlatCard 
+                  key={user.id}
+                  image={user.image}
+                  title={user.name}
+                  stylecss="w-[90%]"
+                  btnTitle="Follow"
+                  btnClick={handleFollow}
+                />
+              ) : <NoData message='Not found any place' />
+            }
+          </div> :
+          <div className={`flex flex-col flex-wrap gap-y-7 gap-x-3 ${userLoading || userError ? 'lg:justify-center items-center' : 'items-end lg:justify-end'} lg:gap-x-7`}>
+            {
+              userLoading ? <Loader loading={userLoading} /> :
+              !userError && 
+              users ? users.map(user => 
+                <FlatCard 
+                  key={user.id}
+                  image={user.image}
+                  title={user.name}
+                  stylecss="w-[90%]"
+                  btnTitle="Follow"
+                  btnClick={notify}
+                />
+              ) : <NoData message='Not found any place' />
+            }
+          </div>
+        }
       </div>
     </div>
   )
