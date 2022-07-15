@@ -1,207 +1,145 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
-import { Form } from 'antd'
+import { Tabs } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
-import Button from '../common/button'
 import AuthContainer from '../../containers/auth'
 import client from '../../apallo-client'
-import { GET_USER_BY_ID } from '../../graphql/queries'
-import { UPDATE_USER } from '../../graphql/mutation'
-import FormInput from '../common/form-element/input-emement'
 import RouteRegistry from '../../routes/RouteRegistry'
+import { GET_FOLLOWERS, GET_FOLLOWING } from '../../graphql/queries'
+import { UNFOLLOW } from '../../graphql/mutation'
+import ProfileCard from '../common/card/profile-card'
+import Loader from '../common/loader'
+import NoData from '../common/no-data'
+import MyProfile from './my-profile'
 
 const Profile = () => {
   const { getUserInfo } = AuthContainer.useContainer()
-  const [form] = Form.useForm()
   const navigate = useNavigate()
-  const { id, image: userImage, name: username } = getUserInfo()
+  const { id } = getUserInfo()
   
-  const [profileImage, setProfileImage] = useState('')
   const [followers, setFollowers] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [errors, setErrors] = useState(null)
   const [following, setFollowing] = useState(0)
+  const [loadingFollowing, setLoadingFollowing] = useState(true)
+  const [errorsFollowing, setErrorsFollowing] = useState(null)
   
-  const [updateUser, { loading, /* error */ }] = useMutation(UPDATE_USER)
+  const [deleteUser_follow] = useMutation(UNFOLLOW)
+
+  const { TabPane } = Tabs
+
+  const onChange = (key) => {
+    console.log(key);
+  }
 
   useEffect(() => {
-    getProfile()
+    getFollowers()
+    getFollowing()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const getProfile = async () => {
+  const getFollowers = async () => {
     const {
-      data: { getUser },
+      data: { getUser_followUsingFollower_id },
+      loading,
+      errors,
     } = await client.query({
-      query: GET_USER_BY_ID,
+      query: GET_FOLLOWERS,
       variables: {
         id: id,
       },
     })
-    successHandler(getUser)
+    setFollowers(getUser_followUsingFollower_id)
+    setLoading(loading)
+    setErrors(errors)
   }
 
-  const updateProfile = async (profile) => {
+  const getFollowing = async () => {
+    const {
+      data: { getUser_followUsingUser_id },
+      loading,
+      errors,
+    } = await client.query({
+      query: GET_FOLLOWING,
+      variables: {
+        id: id,
+      },
+    })
+    setFollowing(getUser_followUsingUser_id)
+    setLoadingFollowing(loading)
+    setErrorsFollowing(errors)
+  }
+
+  const handleUnFollow = async(unfollowId) => {
     try {
       const {
-        data: { updateUser: updatedUser },
-      } = await updateUser({
+        data: { deleteUser_follow: unfollow },
+      } = await deleteUser_follow({
         variables: {
-          id: id,
-          name: profile.name,
-          image: profileImage,
-          mobile: profile.mobile,
-          country: profile.country,
+          id: unfollowId,
         },
       })
-      successHandler(updatedUser)
+      if(unfollow) {
+        const followings = following.filter(f => f.id !== unfollowId)
+        setFollowing(followings)
+      }
     } catch (error) {
       console.error(error)
     }
   }
 
-  const handleImageUpload = (e) => {
-    uploadImage(e.target.files[0])
-  }
-
-  const uploadImage = (image) => {
-    const data = new FormData()
-    data.append("file", image)
-    data.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET)
-    data.append("cloud_name", process.env.REACT_APP_CLOUD_NAME)
-    fetch(process.env.REACT_APP_CLOUDINARY_URL, {
-      method: "post",
-      body: data,
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        setProfileImage(data.url)
-      })
-      .catch((err) => console.log(err))
-  }
-
-  const handleSubmit = () => {
-    form
-      .validateFields()
-      .then((value) => {
-        updateProfile(value)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
-  const successHandler = (profile) => {
-    form.setFieldsValue({
-      name: profile.name,
-      email: profile.email,
-      image: profile.image,
-      mobile: profile.mobile,
-      country: profile.country,
-    })
-    setProfileImage(profile.image)
-    setFollowers(profile.user_followListUsingFollower_id.length)
-    setFollowing(profile.user_followListUsingUser_id.length)
+  const handleRedirect = (id) => {
+    navigate(`${RouteRegistry.traveller.path}/${id}`)
   }
 
   return (
     <div className="md:w-[75%] w-[100%] m-auto bg-white rounded-lg border border-gray-200 shadow-md pt-7 pb-10">
       <div className="flex flex-col items-center">
         <div className="w-[90%]">
-          <Form
-            form={form}
-            onFinish={handleSubmit}
-            className="w-full flex flex-row flex-wrap gap-2"
-          >
-            <div className="w-full flex flex-col items-center">
-              <img
-                className="w-24 h-24 rounded-full shadow-lg mb-[-96px]"
-                src={profileImage !== '' ? profileImage : userImage}
-                alt={username}
-              />
-              <label htmlFor="file-upload" className="w-24 h-24 rounded-full" />
-              <input
-                className="invisible"
-                type="file"
-                id="file-upload"
-                name="avatar"
-                accept="image/png, image/jpeg"
-                onChange={handleImageUpload}
-              />
-              <div className="flex">
-                <span className="flex flex-col items-center gap-1 text-sm text-gray-500 text-center px-4 pb-5 hover:cursor-pointer">
-                  <div onClick={() => navigate(RouteRegistry.follow.path)}>{followers}</div>
-                  <div onClick={() => navigate(RouteRegistry.follow.path)}>Followers</div>
-                </span>
-                <span className="flex flex-col items-center gap-1 text-sm text-gray-500 text-center px-4 pb-5 hover:cursor-pointer">
-                  <div onClick={() => navigate(RouteRegistry.follow.path)}>{following}</div>
-                  <div onClick={() => navigate(RouteRegistry.follow.path)}>Following</div>
-                </span>
+          <Tabs defaultActiveKey="1" onChange={onChange}>
+            <TabPane tab="Profile" key="1">
+              <MyProfile />
+            </TabPane>
+            <TabPane tab="Followers" key="2">
+              <div className="flex flex-row flex-wrap gap-y-7 gap-x-3  lg:gap-x-7">
+                {loading ? (
+                  <Loader loading={loading} />
+                ) : !errors && followers && followers.length > 0 ? (
+                  followers.map(({ userUsingUser_id: follower }) => (
+                    <ProfileCard
+                      key={follower.id}
+                      image={follower.image}
+                      name={follower.name}
+                      onClick={()=>handleRedirect(follower.id)}
+                    />
+                  ))
+                ) : (
+                  <NoData icon={false} message="No Followers" />
+                )}
               </div>
-            </div>
-            <div className="w-[calc(50%-8px)]">
-              <FormInput
-                name="name"
-                placeholder="Name"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your name!",
-                  },
-                ]}
-              />
-            </div>
-            <div className="w-[calc(50%-8px)]">
-              <FormInput
-                name="email"
-                placeholder="Email"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your email",
-                  },
-                  {
-                    type: "email",
-                    message: "Please enter a valid email",
-                  },
-                ]}
-                disabled={true}
-              />
-            </div>
-            <div className="w-[calc(50%-8px)]">
-              <FormInput
-                name="mobile"
-                placeholder="Mobile"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your mobile number",
-                  },
-                  {
-                    pattern: "^[0-9]{10}$",
-                    message: "Please enter a valid mobile number",
-                  },
-                ]}
-              />
-            </div>
-            <div className="w-[calc(50%-8px)]">
-              <FormInput
-                name="country"
-                placeholder="Country"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your country",
-                  },
-                ]}
-              />
-            </div>
-            <div className="w-full flex justify-center">
-              <Button
-                title="Update Profile"
-                loading={loading}
-              />
-            </div>
-          </Form>
+            </TabPane>
+            <TabPane tab="Followings" key="3">
+              <div className="flex flex-row flex-wrap gap-y-7 gap-x-3  lg:gap-x-4">
+                {loadingFollowing ? (
+                  <Loader loading={loading} />
+                ) : !errorsFollowing && following ? (
+                  following.map(({ id, userUsingFollower_id: following }) => (
+                    <ProfileCard
+                      key={following.id}
+                      image={following.image}
+                      name={following.name}
+                      btnTitle="Unfollow"
+                      btnClick={() => handleUnFollow(id)}
+                      onClick={()=>handleRedirect(following.id)}
+                    />
+                  ))
+                ) : (
+                  <NoData icon={false} message="No following" />
+                )}
+              </div>
+            </TabPane>
+          </Tabs>
         </div>
       </div>
     </div>

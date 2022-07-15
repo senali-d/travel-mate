@@ -19,7 +19,6 @@ import PlaceDetail from '../components/places/place-detail'
 import Hotel from '../components/hotel'
 import HotelDetail from '../components/hotel/hotel-detail'
 import MyPlaces from '../components/places/my-places'
-import FollowerFollowing from '../components/profile/follower-following'
 import TravellerDetail from '../components/traveller/traveller-detail'
 import Traveller from '../components/traveller'
 
@@ -42,14 +41,6 @@ const AllRoutes = () => {
           element={
             <PrivateRoute role={Roles.TRAVELLER}>
               <Profile />
-            </PrivateRoute>
-          }
-        />
-        <Route 
-          path={RouteRegistry.follow.path}
-          element={
-            <PrivateRoute role={Roles.TRAVELLER}>
-              <FollowerFollowing />
             </PrivateRoute>
           }
         />

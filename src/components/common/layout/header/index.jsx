@@ -129,13 +129,10 @@ const Header = () => {
                 {RouteRegistry.guides.title}
               </Link>
             </li>
-            <li className="hidden md:flex">
-              <Dropdown overlay={menu}>
-                <span className="flex items-center py-2 pr-4 pl-3 text-[#6d86a8] border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-[#b1b845] md:p-0 hover:cursor-pointer">
-                  <div>Services</div>
-                  <RiArrowDropDownLine size={28} />
-                </span>
-              </Dropdown>
+            <li className="flex items-center">
+              <Link to={RouteRegistry.traveller.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.traveller.path ? 'md:text-[#b1b845] text-white bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
+                {RouteRegistry.traveller.title}
+              </Link>
             </li>
           </ul>
         </div>
