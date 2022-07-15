@@ -347,6 +347,14 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+  getTravellers: [User]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "user" where "role" = 'traveller' LIMIT 5
+      """
+      configuration: "postgresql_config"
+    )
   getUser(id: ID!): User
     @dbquery(
       type: "postgresql"
