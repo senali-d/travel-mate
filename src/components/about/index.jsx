@@ -16,7 +16,7 @@ const About = () => {
               Travel Mate is community of travellers. 
             </h2>
             <p className="mt-6 text-gray-600">
-              Our projects focus on building web applications for travel community, to build a  community for travellers, travell enthusiasts and show the beautiy of the world.
+              Our projects focus on building web applications for travel community, to build a community for travelers, travel enthusiasts and show the beauty of the world.
             </p>
             <p className="mt-4 text-gray-600">
               Basically site interprets the travelling destination. Any community member can create travel destination they visited with some photographs. So other community members can get some idea about next travel destination also share the experience with others.
