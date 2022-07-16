@@ -13,6 +13,12 @@ import ImageCard from '../common/card/image-card'
 import Loader from '../common/loader'
 import NoData from '../common/no-data'
 import FlatCard from '../common/card/flat-card'
+import image1 from '../../assets/images/home/banner-1.jpg'
+import image2 from '../../assets/images/home/banner-2.jpg'
+import image3 from '../../assets/images/home/banner-3.jpg'
+import image4 from '../../assets/images/home/banner-4.jpg'
+import image5 from '../../assets/images/home/banner-5.jpg'
+import Carousel from '../common/carousel'
 
 const Home = () => {
   const { isAuthenticated, getUserInfo } = AuthContainer.useContainer()
@@ -23,14 +29,15 @@ const Home = () => {
   const [userLoading, setUserLoading] = useState(true)
   const [userError, setUserError] = useState(null)
 
-  const { loading, error, data } = useQuery(GET_SIX_PLACES);
+  const carouselImages = [image1, image2, image3, image4, image5]
+  const { loading, error, data } = useQuery(GET_SIX_PLACES)
 
   const places = data && data.getSixPlaces
 
   const handleRedirect = (id) => {
     navigate(`${RouteRegistry.places.path}/${id}`)
   }
-  
+
   const handleViewTraveller = (id) => {
     navigate(`${RouteRegistry.traveller.path}/${id}`)
   }
@@ -44,7 +51,7 @@ const Home = () => {
     const user = getUserInfo()
     if (user !== undefined) {
       setUserId(user.id)
-      if(isAuthenticated()) {
+      if (isAuthenticated()) {
         getUnFollowUsers(user.id)
       }
     }
@@ -56,14 +63,14 @@ const Home = () => {
       loading,
       errors,
     } = await client.query({
-      query: GET_USERS
+      query: GET_USERS,
     })
     setUsers(getTravellers)
     setUserLoading(loading)
     errors && setUserError(errors)
   }
 
-  const getUnFollowUsers = async(userId) => {
+  const getUnFollowUsers = async (userId) => {
     const {
       data: { getUnFollowUsers },
       loading,
@@ -80,16 +87,16 @@ const Home = () => {
   }
 
   const starPoints = ({ points, reviewList }) => {
-    if(reviewList.length > 0) {
-      return points/reviewList.length
-    }else {
+    if (reviewList.length > 0) {
+      return points / reviewList.length
+    } else {
       return points
     }
   }
 
   const [insertUser_follow] = useMutation(FOLLOW)
 
-  const handleFollow = async(followId) => {
+  const handleFollow = async (followId) => {
     try {
       const {
         data: { insertUser_follow: follow },
@@ -99,8 +106,8 @@ const Home = () => {
           user_id: userId,
         },
       })
-      if(follow) {
-        const followings = users.filter(u => u.id !== follow.follower_id)
+      if (follow) {
+        const followings = users.filter((u) => u.id !== follow.follower_id)
         setUsers(followings)
       }
     } catch (error) {
@@ -108,65 +115,92 @@ const Home = () => {
     }
   }
 
-  const notify = () => toast.warn("Please sign in follow travellers")
+  const notify = () => toast.warn("Please sign in follow travellers");
 
   return (
-    <div className="flex">
-      <div className="sm:w-2/3 w-full">
-        <div className={`flex flex-row flex-wrap gap-y-7 gap-x-3 justify-start ${loading || error ? 'lg:justify-center' : 'lg:justify-start'} lg:gap-x-7`}>
-          {
-            loading ? <Loader loading={loading} /> :
-            !error && places ? places.map(place => 
-              <ImageCard 
-                key={place.id}
-                image={place.photo}
-                title={place.title} 
-                description={place.description}
-                stars={starPoints(place)}
-                onClick={() => handleRedirect(place.id)}
-                stylecss="md:w-[calc(50%-1rem)] w-full"
-              />
-            ) : <NoData message='Not found any place' />
-          }
-        </div>
-      </div>
-      <div className="sm:w-1/3 w-full">
-        {isAuthenticated() ?
-          <div className={`flex flex-col flex-wrap gap-y-7 gap-x-3 ${userLoading || userError ? 'lg:justify-center items-center' : 'items-end lg:justify-end'} lg:gap-x-7`}>
-            {
-              userLoading ? <Loader loading={userLoading} /> :
-              !userError && 
-              users ? users.map(user => 
-                <FlatCard 
-                  key={user.id}
-                  image={user.image}
-                  title={user.name}
-                  stylecss="w-[90%]"
-                  btnTitle="Follow"
-                  onClick={()=>handleViewTraveller(user.id)}
-                  btnClick={()=>handleFollow(user.id)}
+    <div className="flex flex-col">
+      <Carousel images={carouselImages} />
+      <div className="flex flex-row pt-20">
+        <div className="sm:w-2/3 w-full">
+          <div
+            className={`flex flex-row flex-wrap gap-y-7 gap-x-3 justify-start ${
+              loading || error ? "lg:justify-center" : "lg:justify-start"
+            } lg:gap-x-7`}
+          >
+            {loading ? (
+              <Loader loading={loading} />
+            ) : !error && places ? (
+              places.map((place) => (
+                <ImageCard
+                  key={place.id}
+                  image={place.photo}
+                  title={place.title}
+                  description={place.description}
+                  stars={starPoints(place)}
+                  onClick={() => handleRedirect(place.id)}
+                  stylecss="md:w-[calc(50%-1rem)] w-full"
                 />
-              ) : <NoData message='Not found any place' />
-            }
-          </div> :
-          <div className={`flex flex-col flex-wrap gap-y-7 gap-x-3 ${userLoading || userError ? 'lg:justify-center items-center' : 'items-end lg:justify-end'} lg:gap-x-7`}>
-            {
-              userLoading ? <Loader loading={userLoading} /> :
-              !userError && 
-              users ? users.map(user => 
-                <FlatCard 
-                  key={user.id}
-                  image={user.image}
-                  title={user.name}
-                  stylecss="w-[90%]"
-                  btnTitle="Follow"
-                  onClick={()=>handleViewTraveller(user.id)}
-                  btnClick={notify}
-                />
-              ) : <NoData message='Not found any place' />
-            }
+              ))
+            ) : (
+              <NoData message="Not found any place" />
+            )}
           </div>
-        }
+        </div>
+        <div className="sm:w-1/3 w-full">
+          {isAuthenticated() ? (
+            <div
+              className={`flex flex-col flex-wrap gap-y-7 gap-x-3 ${
+                userLoading || userError
+                  ? "lg:justify-center items-center"
+                  : "items-end lg:justify-end"
+              } lg:gap-x-7`}
+            >
+              {userLoading ? (
+                <Loader loading={userLoading} />
+              ) : !userError && users ? (
+                users.map((user) => (
+                  <FlatCard
+                    key={user.id}
+                    image={user.image}
+                    title={user.name}
+                    stylecss="w-[90%]"
+                    btnTitle="Follow"
+                    onClick={() => handleViewTraveller(user.id)}
+                    btnClick={() => handleFollow(user.id)}
+                  />
+                ))
+              ) : (
+                <NoData message="Not found any place" />
+              )}
+            </div>
+          ) : (
+            <div
+              className={`flex flex-col flex-wrap gap-y-7 gap-x-3 ${
+                userLoading || userError
+                  ? "lg:justify-center items-center"
+                  : "items-end lg:justify-end"
+              } lg:gap-x-7`}
+            >
+              {userLoading ? (
+                <Loader loading={userLoading} />
+              ) : !userError && users ? (
+                users.map((user) => (
+                  <FlatCard
+                    key={user.id}
+                    image={user.image}
+                    title={user.name}
+                    stylecss="w-[90%]"
+                    btnTitle="Follow"
+                    onClick={() => handleViewTraveller(user.id)}
+                    btnClick={notify}
+                  />
+                ))
+              ) : (
+                <NoData message="Not found any place" />
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
