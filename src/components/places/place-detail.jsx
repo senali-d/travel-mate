@@ -194,7 +194,7 @@ const PlaceDetail = () => {
                 <div className="flex mb-4 pt-1">
                   {loadStars(
                     parseInt(
-                      (place?.points !== undefined && place.reviewList.length > 0) ? parseInt(place?.points)/place.reviewList.length : 0
+                      (place?.points !== undefined && place.reviewList.length > 0) ? parseInt(place?.points - 5)/place.reviewList.length : 5
                     )
                   )}
                 </div>
