@@ -7,6 +7,8 @@ import Button from '../common/button'
 import ProfileCard from '../common/card/profile-card'
 import Loader from '../common/loader'
 import NoData from '../common/no-data'
+import Image1 from '../../assets/images/guides/guide-1.jpg'
+import Image2 from '../../assets/images/guides/guide-2.jpg'
 
 const Guides = () => {
   const navigate = useNavigate()
@@ -16,22 +18,22 @@ const Guides = () => {
 
   return (
     <>
-      <div className="w-full flex pb-10">
-        <div className="flex gap-5 flex-1">
+      <div className="w-full flex pb-10 flex-col lg:flex-row ">
+        <div className="flex gap-5 flex-1 flex-wrap">
           <img
-            src="https://res.cloudinary.com/zencloude/image/upload/v1657777019/travel-mate/traveller_l5ptgk.jpg"
+            src={Image1}
             alt="image"
             loading="lazy"
-            className="rounded-2xl md:5/12 lg:w-5/12"
+            className="rounded-2xl sm:w-1/3 md:w-4/12 lg:w-5/12 max-h-[300px]"
           />
           <img
-            src="https://res.cloudinary.com/zencloude/image/upload/v1657777019/travel-mate/traveller_l5ptgk.jpg"
+            src={Image2}
             alt="image"
             loading="lazy"
-            className="rounded-2xl md:5/12 lg:w-5/12"
+            className="rounded-2xl sm:w-1/3 md:w-4/12 hidden sm:block lg:w-5/12 max-h-[300px]"
           />
         </div>
-        <div className=''>
+        <div className='pt-5'>
           <p className="text-lg text-gray-900 font-bold">
             Please contact us for join as Guide!
           </p>

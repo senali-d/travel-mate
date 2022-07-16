@@ -120,19 +120,24 @@ const Header = () => {
         >
           <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
             <li className="flex items-center">
-              <Link to={RouteRegistry.places.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.places.path ? 'md:text-[#b1b845] text-white bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
+              <a href={RouteRegistry.about.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.about.path ? 'md:text-[#b1b845] text-white w-full bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
+                {RouteRegistry.about.title}
+              </a>
+            </li>
+            <li className="flex items-center">
+              <a href={RouteRegistry.places.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.places.path ? 'md:text-[#b1b845] text-white w-full bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
                 {RouteRegistry.places.title}
-              </Link>
+              </a>
             </li>
             <li className="flex items-center">
-              <Link to={RouteRegistry.guides.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.guides.path ? 'md:text-[#b1b845] text-white bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
+              <a href={RouteRegistry.guides.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.guides.path ? 'md:text-[#b1b845] text-white w-full bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
                 {RouteRegistry.guides.title}
-              </Link>
+              </a>
             </li>
             <li className="flex items-center">
-              <Link to={RouteRegistry.traveller.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.traveller.path ? 'md:text-[#b1b845] text-white bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
+              <a href={RouteRegistry.traveller.path} className={`block py-2 pr-4 pl-3 rounded md:bg-transparent ${pathname === RouteRegistry.traveller.path ? 'md:text-[#b1b845] text-white w-full bg-[#b1b845]' : 'text-[#6d86a8]'} md:hover:text-[#b1b845] md:p-0`}>
                 {RouteRegistry.traveller.title}
-              </Link>
+              </a>
             </li>
           </ul>
         </div>
