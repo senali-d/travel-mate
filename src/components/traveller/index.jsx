@@ -9,6 +9,7 @@ import { GET_USER_EXCEPT_ME, GET_ALL_USERS } from '../../graphql/queries'
 import ProfileCard from '../common/card/profile-card'
 import Loader from '../common/loader'
 import NoData from '../common/no-data'
+import Thumbnail from '../../assets/images/thumbnail.png'
 
 const Traveller = () => {
   const { isAuthenticated, getUserInfo } = AuthContainer.useContainer();
@@ -71,7 +72,7 @@ const Traveller = () => {
                 travellers.map((traveller) => (
                   <ProfileCard
                     key={traveller.id}
-                    image={traveller.image}
+                    image={traveller.image === null ? Thumbnail : traveller.image}
                     name={traveller.name}
                     location={traveller.country}
                     email={traveller.email}
@@ -98,7 +99,7 @@ const Traveller = () => {
                 allTravellers.map((traveller) => (
                   <ProfileCard
                     key={traveller.id}
-                    image={traveller.image}
+                    image={traveller.image === null ? Thumbnail : traveller.image}
                     name={traveller.name}
                     location={traveller.country}
                     email={traveller.email}

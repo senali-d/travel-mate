@@ -67,7 +67,7 @@ const TravellerDetail = () => {
                 <>
                   <img
                     className="w-24 h-24 rounded-full shadow-lg mb-5"
-                    src={profile !== '' ? profile?.image : Thumbnail}
+                    src={(profile === '' || profile.image === null) ? Thumbnail : profile?.image}
                     alt={profile?.name}
                   />
                   <div className="flex">
