@@ -88,7 +88,7 @@ const Home = () => {
 
   const starPoints = ({ points, reviewList }) => {
     if (reviewList.length > 0) {
-      return points / reviewList.length
+      return (points-5) / reviewList.length
     } else {
       return points
     }
