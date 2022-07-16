@@ -61,3 +61,9 @@ yarn start
 ```
 
 Open http://localhost:3000 to view it in your browser.
+
+If you do a change in stepzen backend please remember to start deploy the changes to StepZen. Run the follow command to deploy the changes.
+
+```
+stepzen start
+```
