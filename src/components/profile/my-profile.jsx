@@ -112,7 +112,7 @@ const MyProfile = () => {
             <div className="w-full flex flex-col items-center">
               <img
                 className="w-24 h-24 rounded-full shadow-lg mb-[-96px]"
-                src={profileImage !== '' ? profileImage : userImage}
+                src={(profileImage === '' || profileImage === null) ? userImage : profileImage }
                 alt={username}
               />
               <label htmlFor="file-upload" className="w-24 h-24 rounded-full" />

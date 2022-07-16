@@ -123,7 +123,7 @@ const Profile = () => {
               <div className="flex flex-row flex-wrap gap-y-7 gap-x-3  lg:gap-x-4">
                 {loadingFollowing ? (
                   <Loader loading={loading} />
-                ) : !errorsFollowing && following ? (
+                ) : !errorsFollowing && following && followers.length > 0 ? (
                   following.map(({ id, userUsingFollower_id: following }) => (
                     <ProfileCard
                       key={following.id}

@@ -45,12 +45,14 @@ const Footer = () => {
             <a
               href="https://twitter.com/senali_d"
               className="hover:text-[#b1b845]"
+              target="_blank"
             >
               <AiOutlineTwitter size="20" />
             </a>
             <a
               href="https://github.com/senali-d"
               className="hover:text-[#b1b845]"
+              target="_blank"
             >
               <AiFillGithub size="20" />
             </a>
