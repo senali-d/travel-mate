@@ -2,7 +2,11 @@
 
 This project was completed as part of the a StepZen GraphQL Challenge Hackathon organized by StepZen GraphQL Challenge. As a result of completing this project I wanted to got a better understanding of some of the GraphQL, stepZen, newer React features and etc.
 
-I also wanted to try out the API provided by Supabase, where I was able to take the opportunity to write a basic cache to reduce API requests.
+## Purpose
+
+Our projects focus on building web applications for travel community, to build a community for travelers, travel enthusiasts and show the beauty of the world.
+
+
 
 ![travel-mate-app](https://user-images.githubusercontent.com/52546856/179351951-b7f5b985-608f-42db-a2d8-5596fb8866b5.png)
 
