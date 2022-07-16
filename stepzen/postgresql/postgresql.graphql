@@ -283,6 +283,14 @@ type Query {
       table: "place"
       configuration: "postgresql_config"
     )
+  getSixPlaces: [Place]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "place" LIMIT 4
+      """
+      configuration: "postgresql_config"
+    )
   getPlace(id: ID!): Place
     @dbquery(
       type: "postgresql"

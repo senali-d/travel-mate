@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import client from '../../apallo-client'
 import AuthContainer from '../../containers/auth'
 import RouteRegistry from '../../routes/RouteRegistry'
-import { GET_PLACES, GET_USERS, GET_UNFOLLOW_USER } from '../../graphql/queries'
+import { GET_SIX_PLACES, GET_USERS, GET_UNFOLLOW_USER } from '../../graphql/queries'
 import { FOLLOW } from '../../graphql/mutation'
 import ImageCard from '../common/card/image-card'
 import Loader from '../common/loader'
@@ -23,9 +23,9 @@ const Home = () => {
   const [userLoading, setUserLoading] = useState(true)
   const [userError, setUserError] = useState(null)
 
-  const { loading, error, data } = useQuery(GET_PLACES);
+  const { loading, error, data } = useQuery(GET_SIX_PLACES);
 
-  const places = data && data.getPlaceList
+  const places = data && data.getSixPlaces
 
   const handleRedirect = (id) => {
     navigate(`${RouteRegistry.places.path}/${id}`)

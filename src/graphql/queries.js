@@ -52,6 +52,21 @@ export const GET_PLACES_BY_ID = gql`
   }
 `;
 
+export const GET_SIX_PLACES = gql`
+  query MyQuery   {
+    getSixPlaces {
+      id
+      title
+      description
+      points
+      photo
+      reviewList {
+        id
+      }
+    }
+  }
+`;
+
 export const GET_USER_BY_ID = gql`
   query MyQuery($id: ID!) {
     getUser(id: $id) {
